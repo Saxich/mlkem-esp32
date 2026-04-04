@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+#ifndef CBD_H
+#define CBD_H
+
+#include <stdint.h>
+#include "params.h"
+#include "poly.h"
+
+
+#ifdef SPEED_CODE
+    #define poly_cbd_eta1 MLKEM_NAMESPACE(poly_cbd_eta1)
+    void poly_cbd_eta1(poly *r, const uint8_t buf[MLKEM_ETA1*MLKEM_N/4]);
+
+    #define poly_cbd_eta2 MLKEM_NAMESPACE(poly_cbd_eta2)
+    void poly_cbd_eta2(poly *r, const uint8_t buf[MLKEM_ETA2*MLKEM_N/4]);
+#else // STACK_CODE
+    #define poly_cbd_eta1 MLKEM_NAMESPACE(poly_cbd_eta1)
+    void poly_cbd_eta1(poly *r, const uint8_t buf[MLKEM_ETA1 * MLKEM_N / 4], int add);
+
+    #define poly_cbd_eta2 MLKEM_NAMESPACE(poly_cbd_eta2)
+    void poly_cbd_eta2(poly *r, const uint8_t buf[MLKEM_ETA2 * MLKEM_N / 4], int add);
+#endif //SPEED_CODE
+
+
+#endif

@@ -1,0 +1,21 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+#ifndef VERIFY_H
+#define VERIFY_H
+
+#include <stddef.h>
+#include <stdint.h>
+#include "params.h"
+
+#define verify MLKEM_NAMESPACE(verify)
+int verify(const uint8_t *a, const uint8_t *b, size_t len);
+
+#define cmov MLKEM_NAMESPACE(cmov)
+void cmov(uint8_t *r, const uint8_t *x, size_t len, uint8_t b);
+
+#define cmov_int16 MLKEM_NAMESPACE(cmov_int16)
+void cmov_int16(int16_t *r, int16_t v, uint16_t b);
+
+#define buffer_zeroize MLKEM_NAMESPACE(buffer_zeroize)
+void buffer_zeroize(void *ptr, size_t len);
+
+#endif
