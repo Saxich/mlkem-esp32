@@ -24,10 +24,10 @@ Selected by defining exactly one macro in `main/user_settings.h`:
 | `STACK_XTREME` | Extends STACK by generating the noise vector on-the-fly during matrix multiplication, eliminating the noise buffer entirely; constant peak stack across all K values |
 | `STACK_DUALCOR4E` | Parallelizes the STACK matrix-vector multiplication across both cores in a single pass; adjusts for odd K (ML-KEM-768) where rows cannot be evenly split |
 
-## Performance (SPEED variant, ESP32 @ 240 MHz)
+## Performance
 
 
-## Stack Usage (FreeRTOS tasks)
+## Memory Usage
 
 
 ## Tests and Benchmarks
