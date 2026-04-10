@@ -36,7 +36,7 @@ Selected by defining exactly one macro in `main/user_settings.h`:
 ## Key Implementation Details
 
 
-## Hardware Requirements
+## Requirements
 
 - ESP32 (Xtensa LX6, dual-core, 240 MHz)
 - ESP-IDF development framework
