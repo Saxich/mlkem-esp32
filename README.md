@@ -38,9 +38,8 @@ Selected by defining exactly one macro in `main/user_settings.h`:
 
 ## Requirements
 
-- ESP32 (Xtensa LX6, dual-core, 240 MHz)
+- ESP32
 - ESP-IDF development framework
-- For dual-core variants: FreeRTOS task pinning to specific cores
 
 ## Build
 
