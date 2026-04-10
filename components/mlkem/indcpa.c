@@ -9,10 +9,13 @@
  * Build variants (selected at compile time):
  *
  *   SPEED
- *     Reference implementation preserved without modification, optimized for
- *     execution time. Dual-core task mapping (SPEED_DUALCORE) is based on
- *     timing measurements of functions called from indcpa; initial usage of dualcore
- *     inspired by fsegatz/kybesp32. See thesis for details.
+ *     Reference implementation optimized for
+ *     execution time.
+ *
+ *   SPEED_DUALCORE
+ *     Dual-core task mapping () is based on timing measurements 
+ *     of functions called from indcpa; initial usage of dualcore
+ *     inspired by fsegatz/kybesp32.
  *
  *   STACK
  *     Derived from pq-code-package/mlkem-c-embedded (Apache-2.0 OR CC0-1.0).
