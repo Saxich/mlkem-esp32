@@ -124,7 +124,29 @@ If you are using the repository without modifications, set `TEST_TO_TURN` to one
 
 ---
 
-## 5. Set CPU Frequency
+## 5. Set Compiler Optimization Level
+
+By default, ESP-IDF uses the **Debug** optimization level (`-Og`), which produces slower code. For accurate benchmarks, switch to `-O2`:
+
+```bash
+idf.py menuconfig
+```
+
+Navigate to:
+
+```
+Component config → Compiler options → Optimization Level → Optimize for performance (-O2)
+```
+
+Save and exit (`S` → `Q`).
+
+> **Note:** Always use `-O2` when running performance or memory benchmarks. Debug builds will report significantly worse cycle counts.
+
+This applies to both the main project and any comparison implementations. For installation instructions of each comparison implementation, see the README in its respective subdirectory under [comparison/](comparison/).
+
+---
+
+## 6. Set CPU Frequency
 
 ```bash
 idf.py menuconfig
@@ -140,7 +162,7 @@ Select the desired frequency (80 / 160 / 240 MHz) and save.
 
 ---
 
-## 6. Build, Flash, Monitor
+## 7. Build, Flash, Monitor
 
 ```bash
 idf.py set-target esp32
@@ -151,7 +173,7 @@ idf.py flash monitor -p COM3  # specify port manually
 
 ---
 
-## 7. ESP32 Hardware TRNG
+## 8. ESP32 Hardware TRNG
 
 For maximum entropy quality, ensure Wi-Fi or BT is initialized when using the cryptosystem. The ESP32 hardware RNG (`WDEV_RND_REG`) operates without RF but with reduced entropy sourcing.
 

@@ -146,6 +146,10 @@ Input buffers are not included in measurements. Heap is non-zero only for DUALCO
 | STACK_XTREME     | Decaps    | 2 064  | 0     | 2 064  |
 
 
+## Comparison
+
+The [comparison/](comparison/) directory contains a separate ESP-IDF project for benchmarking third-party cryptographic libraries against this implementation. Currently includes **wolfSSL**. See [comparison/mlkem-wolfssl/README_wolfssl.md](comparison/mlkem-wolfssl/README_wolfssl.md) for setup and usage.
+
 ## User Manual and Tests
 
 See [USER_MANUAL.md](USER_MANUAL.md) for setup, configuration, build instructions, implemented tests, and their usage.
