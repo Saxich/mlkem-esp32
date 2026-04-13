@@ -3,7 +3,7 @@
  *
  * Licensing: GPL-3.0-or-later (see LICENSE and CREDITS.md)
  *
- * Based on fsegatz/kybesp32 (no explicit license — all rights reserved)
+ * Based on fsegatz/kybesp32 (MIT License)
  *   https://github.com/fsegatz/kybesp32
  *
  * NOTE: For maximum entropy quality, ensure Wi-Fi or BT is initialized

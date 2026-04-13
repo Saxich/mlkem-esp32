@@ -74,7 +74,7 @@ void generate_kat_output(void) {
     int input_vector_sets = 0;
     int output_hash_sets = 0;
 
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
     printf("\nAlgorithm: %s\n", CRYPTO_ALGNAME);
     printf("Mode: %s\n\n", CRYPTO_ALGMODE);
 #endif
@@ -82,7 +82,7 @@ void generate_kat_output(void) {
     // Open input vectors
     fp_input = fmemopen((void *)kat_input_data, sizeof(kat_input_data) - 1, "r");
     if (fp_input == NULL) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
         printf("ERROR: cannot open embedded KAT input data\n");
 #endif
         return;
@@ -91,7 +91,7 @@ void generate_kat_output(void) {
     // Open output hashes
     fp_hash = fmemopen((void *)kat_output_hash_data, sizeof(kat_output_hash_data) - 1, "r");
     if (fp_hash == NULL) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
         printf("ERROR: cannot open embedded KAT output hash data\n");
 #endif
         fclose(fp_input);
@@ -112,7 +112,7 @@ void generate_kat_output(void) {
     }
     fclose(fp_count);
 
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
     printf("Input vector sets: %d\n", input_vector_sets);
     printf("Output hash sets: %d\n\n", output_hash_sets);
 #endif
@@ -142,7 +142,7 @@ void generate_kat_output(void) {
         if (strncmp(line, "count = ", 8) == 0) {
             int pk_match = 0, sk_match = 0, ct_match = 0, ss_match = 0;
 
-#ifndef KAT_TEST_AUTOMAT            
+#ifndef TEST_AUTOMAT            
             printf("Testing vector set %d...\n", count);
 #endif
             
@@ -166,7 +166,7 @@ void generate_kat_output(void) {
                 read_kat_line(fp_hash, ref_sk_hash, 32) ||
                 read_kat_line(fp_hash, ref_ct_hash, 32) ||
                 read_kat_line(fp_hash, ref_ss_hash, 32)) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
                 printf("ERROR: Cannot read reference hashes for count %d\n", count);
 #endif
                 break;
@@ -183,7 +183,7 @@ void generate_kat_output(void) {
             sha3_256(pk_hash, pk, CRYPTO_PUBLICKEYBYTES);
             pk_match = (memcmp(pk_hash, ref_pk_hash, 32) == 0);
             
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             if (!pk_match) {
                 printf("  FAIL: pk hash mismatch\n");
             }
@@ -193,7 +193,7 @@ void generate_kat_output(void) {
             sha3_256(sk_hash, sk, CRYPTO_SECRETKEYBYTES);
             sk_match = (memcmp(sk_hash, ref_sk_hash, 32) == 0);
             
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             if (!sk_match) {
                 printf("  FAIL: sk hash mismatch\n");
             }
@@ -206,7 +206,7 @@ void generate_kat_output(void) {
             sha3_256(ct_hash, ct, CRYPTO_CIPHERTEXTBYTES);
             ct_match = (memcmp(ct_hash, ref_ct_hash, 32) == 0);
             
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             if (!ct_match) {
                 printf("  FAIL: ct hash mismatch\n");
             }
@@ -216,7 +216,7 @@ void generate_kat_output(void) {
             sha3_256(ss_hash, ss_enc, CRYPTO_BYTES);
             ss_match = (memcmp(ss_hash, ref_ss_hash, 32) == 0);
             
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             if (!ss_match) {
                 printf("  FAIL: ss hash mismatch\n");
             }
@@ -224,7 +224,7 @@ void generate_kat_output(void) {
 
             // Decapsulate and verify
             crypto_kem_dec(ss_dec, ct, sk);
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             if (memcmp(ss_enc, ss_dec, CRYPTO_BYTES)) {
                 printf("  ERROR: Encapsulation/decapsulation mismatch!\n");
             }
@@ -232,12 +232,12 @@ void generate_kat_output(void) {
 
             // Check if all hashes match
             if (pk_match && sk_match && ct_match && ss_match) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
                 printf("Vector set %d PASSED\n", count);
 #endif
                 passed_count++;
             }
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             else {
                 printf("Vector set %d FAILED\n", count);
             }
@@ -258,7 +258,7 @@ void generate_kat_output(void) {
     fclose(fp_input);
     fclose(fp_hash);
 
-#ifdef KAT_TEST_AUTOMAT
+#ifdef TEST_AUTOMAT
     printf("Automated KAT for %s  %d\n", CRYPTO_ALGMODE, MLKEM_K);
     printf("%s\n", (passed_count == compared_count && compared_count > 0) ? "PASSED" : "FAILED");
 #else
@@ -291,7 +291,7 @@ void compare_known_vector(void) {
     FILE *fp_hash;
     char line[256];
 
-#ifdef KAT_TEST_AUTOMAT
+#ifdef TEST_AUTOMAT
     printf("Automated KAT for %s  %d\n", CRYPTO_ALGMODE, MLKEM_K);
 #else
 #if MLKEM_K == 2
@@ -306,7 +306,7 @@ void compare_known_vector(void) {
     // Open input vectors
     fp_input = fmemopen((void *)kat_input_data, sizeof(kat_input_data) - 1, "r");
     if (fp_input == NULL) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
         printf("ERROR: cannot open embedded KAT input data\n");
 #endif
         return;
@@ -315,7 +315,7 @@ void compare_known_vector(void) {
     // Open output hashes
     fp_hash = fmemopen((void *)kat_output_hash_data, sizeof(kat_output_hash_data) - 1, "r");
     if (fp_hash == NULL) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
         printf("ERROR: cannot open embedded KAT output hash data\n");
 #endif
         fclose(fp_input);
@@ -347,38 +347,38 @@ void compare_known_vector(void) {
 
             int pk_match = 0, sk_match = 0, ct_match = 0, ss_match = 0;
 
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("=== Reading Input Vectors (count = 0) ===\n");
 #endif
 
             // Read input vectors (z, d, m)
             if (read_kat_line(fp_input, z, MLKEM_SYMBYTES)) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
                 printf("ERROR: Failed to read z\n");
 #endif
                 break;
             }
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             print_hex_field("z (input)", z, MLKEM_SYMBYTES);
 #endif
 
             if (read_kat_line(fp_input, d, MLKEM_SYMBYTES)) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
                 printf("ERROR: Failed to read d\n");
 #endif
                 break;
             }
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             print_hex_field("d (input)", d, MLKEM_SYMBYTES);
 #endif
 
             if (read_kat_line(fp_input, m, MLKEM_SYMBYTES)) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
                 printf("ERROR: Failed to read m\n");
 #endif
                 break;
             }
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             print_hex_field("m (input)", m, MLKEM_SYMBYTES);
 #endif
 
@@ -397,14 +397,14 @@ void compare_known_vector(void) {
                 read_kat_line(fp_hash, ref_sk_hash, 32) ||
                 read_kat_line(fp_hash, ref_ct_hash, 32) ||
                 read_kat_line(fp_hash, ref_ss_hash, 32)) {
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
                 printf("ERROR: Cannot read reference hashes\n");
 #endif
                 break;
             }
 
             // ========== KEYGEN ==========
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("\n=== KEYGEN ===\n");
 #endif
             memcpy(coins, d, MLKEM_SYMBYTES);
@@ -415,25 +415,25 @@ void compare_known_vector(void) {
             sha3_256(pk_hash, pk, CRYPTO_PUBLICKEYBYTES);
             sha3_256(sk_hash, sk, CRYPTO_SECRETKEYBYTES);
 
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("\n--- KEYGEN Hash Comparison ---\n");
             print_hex_field("pk_hash (computed)", pk_hash, 32);
             print_hex_field("pk_hash (reference)", ref_pk_hash, 32);
 #endif
             pk_match = (memcmp(pk_hash, ref_pk_hash, 32) == 0);
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("pk_hash match: %s\n", pk_match ? "PASS" : "FAIL");
 
             print_hex_field("sk_hash (computed)", sk_hash, 32);
             print_hex_field("sk_hash (reference)", ref_sk_hash, 32);
 #endif
             sk_match = (memcmp(sk_hash, ref_sk_hash, 32) == 0);
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("sk_hash match: %s\n", sk_match ? "PASS" : "FAIL");
 #endif
 
             // ========== ENCAPSULATION ==========
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("\n=== ENCAPSULATION ===\n");
 #endif
             crypto_kem_enc_derand(ct, ss_enc, pk, m);
@@ -442,35 +442,35 @@ void compare_known_vector(void) {
             sha3_256(ct_hash, ct, CRYPTO_CIPHERTEXTBYTES);
             sha3_256(ss_hash, ss_enc, CRYPTO_BYTES);
 
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("\n--- ENCAPSULATION Hash Comparison ---\n");
             print_hex_field("ct_hash (computed)", ct_hash, 32);
             print_hex_field("ct_hash (reference)", ref_ct_hash, 32);
 #endif
             ct_match = (memcmp(ct_hash, ref_ct_hash, 32) == 0);
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("ct_hash match: %s\n", ct_match ? "PASS" : "FAIL");
 
             print_hex_field("ss_hash (computed)", ss_hash, 32);
             print_hex_field("ss_hash (reference)", ref_ss_hash, 32);
 #endif
             ss_match = (memcmp(ss_hash, ref_ss_hash, 32) == 0);
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("ss_hash match: %s\n", ss_match ? "PASS" : "FAIL");
 #endif
 
             // ========== DECAPSULATION ==========
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("\n=== DECAPSULATION ===\n");
 #endif
             crypto_kem_dec(ss_dec, ct, sk);
 
             int ss_enc_dec_match = (memcmp(ss_enc, ss_dec, CRYPTO_BYTES) == 0);
-#ifndef KAT_TEST_AUTOMAT
+#ifndef TEST_AUTOMAT
             printf("ss_enc == ss_dec: %s\n", ss_enc_dec_match ? "PASS" : "FAIL");
 #endif
 
-#ifdef KAT_TEST_AUTOMAT
+#ifdef TEST_AUTOMAT
             printf("%s\n", (pk_match && sk_match && ct_match && ss_match && ss_enc_dec_match) ? "PASSED" : "FAILED");
 #else
             // ========== SUMMARY ==========

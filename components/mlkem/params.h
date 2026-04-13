@@ -8,17 +8,26 @@
     #define MLKEM_K 3 
 #endif
 
-/* ===== PROPAGATION ===== */
-#ifdef STACK_DUALCORE
-    #undef  STACK
+/* ===== MUTUAL EXCLUSION GUARDS ===== */
+#if defined(STACK) && defined(STACK_XTREME)
+    #error "STACK and STACK_XTREME are mutually exclusive"
 #endif
 
-#ifdef STACK_XTREME
-    #undef  STACK
+#if defined(STACK) && defined(STACK_DUALCORE)
+    #error "STACK and STACK_DUALCORE are mutually exclusive"
 #endif
 
-#ifdef SPEED_DUALCORE
-    #undef  SPEED
+#if defined(STACK_XTREME) && defined(STACK_DUALCORE)
+    #error "STACK_XTREME and STACK_DUALCORE are mutually exclusive"
+#endif
+
+#if defined(SPEED) && defined(SPEED_DUALCORE)
+    #error "SPEED and SPEED_DUALCORE are mutually exclusive"
+#endif
+
+#if (defined(STACK) || defined(STACK_XTREME) || defined(STACK_DUALCORE)) && \
+    (defined(SPEED) || defined(SPEED_DUALCORE))
+    #error "STACK and SPEED modes are mutually exclusive"
 #endif
 
 /* ===== INTERNAL CODE SWITCHES ===== */
@@ -31,22 +40,13 @@
 #if defined(SPEED) || defined(SPEED_DUALCORE)
     #define SPEED_CODE
 #else
-    #undef SPEED_CODE 
+    #undef SPEED_CODE
 #endif
 
 #if defined(STACK_DUALCORE) || defined(SPEED_DUALCORE)
     #define DUALCORE_CODE
 #else
     #undef DUALCORE_CODE
-#endif
-
-/* ===== MUTUAL EXCLUSION GUARDS ===== */
-#if defined(STACK_XTREME) && defined(STACK_DUALCORE)
-    #error "STACK_XTREME and STACK_DUALCORE are mutually exclusive"
-#endif
-
-#if defined(STACK_CODE) && defined(SPEED_CODE)
-    #error "STACK and SPEED modes are mutually exclusive"
 #endif
 
 /* ===== FALLBACK: default to SPEED_CODE if nothing selected ===== */

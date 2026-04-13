@@ -50,7 +50,7 @@
 // Number of iterations makros
 #define WARMUP_ITER       10
 
-#define REDUCE 4 
+#define REDUCE 1
 
 #define PERF_KEYPAIR_ITER 200 / REDUCE
 #define PERF_ENC_ITER     200 / REDUCE
@@ -174,17 +174,24 @@ void print_perf_stats(const char *operation, measur_stats_t *stats, uint32_t fre
     //        stats->min, stats->min * 1000.0f / freq_hz);
     // printf("  Max:    %7lu cycles (%7.3f ms)\n", 
     //        stats->max, stats->max * 1000.0f / freq_hz);
-    printf("  Avg:    %7.0f cycles (%7.3f ms)\n", 
-           stats->avg, stats->avg * 1000.0f / freq_hz);
+    #ifndef TEST_AUTOMAT
+        printf("  Avg:    %7.0f cycles (%7.3f ms)\n", 
+            stats->avg, stats->avg * 1000.0f / freq_hz);
+    #endif        
     // printf("  StdDev: %7.0f cycles (%7.3f ms)\n", 
-    //        stats->stddev, stats->stddev * 1000.0f / freq_hz);
-    // printf("[Raw - min max avg stddev]:\n");        
-    // printf("%7lu %7lu %7.0f %7.0f\n", 
-    //        stats->min, stats->max, stats->avg, stats->stddev);
+    //        stats->stddev, stats->stddev * 1000.0f / freq_hz);.
+    
+    #ifdef TEST_AUTOMAT
+        printf("[Raw - min max avg stddev]:\n");        
+        printf("%7lu %7lu %7.0f %7.0f\n", 
+            stats->min, stats->max, stats->avg, stats->stddev);
+    #endif       
 
+    #ifndef TEST_AUTOMAT
     if (ref != 0) {
         printf("  RefAvg: %7lu cycles  (%+6.2f%%)\n", ref, diff);
     }
+    #endif    
 
 
 }
@@ -215,8 +222,10 @@ void print_mem_stats(const char *operation, measur_stats_t *stack_stats, measur_
     // printf("%7lu %7lu %7.0f %7.0f\n", 
     //        heap_stats->min, heap_stats->max, heap_stats->avg, heap_stats->stddev);
 
-    printf("[Raw - stackmax heapmax]:\n");   
-    printf("%7lu %7lu\n", stack_stats->max, heap_stats->max);   
+    // #ifdef TEST_AUTOMAT
+        printf("[Raw - stackmax heapmax]:\n");   
+        printf("%7lu %7lu\n", stack_stats->max, heap_stats->max);   
+    // #endif
     
     printf("\n");
 }
@@ -413,6 +422,9 @@ void bechmark_suite(void){
         TaskHandle_t xHandle = NULL;
         TaskHandle_t parentHandle = xTaskGetCurrentTaskHandle();
 
+        printf("***START OF ESP32 OUTPUT***\n");
+        fflush(stdout);
+
         printf("\n");
         printf("========================================\n");
         printf(" CONFIG INFO\n");
@@ -523,6 +535,9 @@ void bechmark_suite(void){
             // printf("Performance test completed\n\n");
         }
 
+        printf("***END OF ESP32 OUTPUT***\n");
+        fflush(stdout);
+
 }
 
 
@@ -585,94 +600,17 @@ void generate_vectors(void *pvParameters) {
 void kat_output_test(void *pvParameters) {
     configASSERT((uint32_t)pvParameters == 1);
 
-    printf("***START OF ESP32 KAT OUTPUT***\n");
+    printf("***START OF ESP32 OUTPUT***\n");
     fflush(stdout);
 
     // Main KAT test function
     generate_kat_output();
     // compare_known_vector();
 
-    printf("***END OF ESP32 KAT OUTPUT***\n");
+    printf("***END OF ESP32 OUTPUT***\n");
 
     fflush(stdout);
     vTaskDelay(pdMS_TO_TICKS(100));
-    vTaskDelete(NULL);
-}
-
-// keccak_test_orig
-void keccak_test_orig(void *pvParameters) {
-    configASSERT((uint32_t)pvParameters == 1);
-    
-    printf("***START OF KECCAK TEST***\n");
-    fflush(stdout);
-    
-    // ========== INTEGRITY TEST ==========
-    printf("[1] Running integrity test...\n");
-    
-    // Test vector: specific input
-    uint8_t input[32] = {
-        0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
-        0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
-    
-    uint8_t output[32];
-    
-    // Compute SHA3-256
-    sha3_256(output, input, 32);
-    
-    printf("SHA3-256 output:\n");
-    for(int i = 0; i < 32; i++) {
-        printf("%02x", output[i]);
-        if((i+1) % 16 == 0) printf("\n");
-    }
-    
-    // Expected output from original 64-bit implementation
-    uint8_t expected[32] = {
-        0x95, 0x7c, 0x4f, 0xcb, 0x4b, 0xe7, 0xc0, 0x0e,
-        0x88, 0x0e, 0x56, 0x48, 0x92, 0xfd, 0xdc, 0x04,
-        0x56, 0x17, 0xe3, 0x02, 0x1e, 0xd2, 0x18, 0x24,
-        0x28, 0x0f, 0x8f, 0x85, 0x62, 0x04, 0xc8, 0x98
-    };
-    
-    if(memcmp(output, expected, 32) == 0) {
-        printf("\n[OK] ✓ SHA3 outputs match!\n");
-    } else {
-        printf("\n[FAIL] ✗ SHA3 outputs differ!\n");
-        printf("Expected:\n");
-        for(int i = 0; i < 32; i++) {
-            printf("%02x", expected[i]);
-            if((i+1) % 16 == 0) printf("\n");
-        }
-        printf("\n***TEST ABORTED***\n");
-        fflush(stdout);
-        vTaskDelete(NULL);
-        return;
-    }
-    
-    // ========== PERFORMANCE TEST ==========
-    printf("\n[2] Running performance test...\n");
-    
-    esp_cpu_cycle_count_t start = esp_cpu_get_cycle_count();
-    keccak_loop(output, input, 32);
-    esp_cpu_cycle_count_t end = esp_cpu_get_cycle_count();
-    
-    uint32_t cycles = end - start;
-    uint32_t reference_cycles = 541975709;
-    
-    printf("Cycles: %lu\n", (unsigned long)cycles);
-    printf("Reference (64-bit): %lu\n", (unsigned long)reference_cycles);
-    
-    if(cycles < reference_cycles) {
-        float speedup = ((float)(reference_cycles - cycles) / reference_cycles) * 100.0f;
-        printf("Result: %.2f%% FASTER\n", speedup);
-    } else {
-        float slowdown = ((float)(cycles - reference_cycles) / reference_cycles) * 100.0f;
-        printf("Result: %.2f%% SLOWER\n", slowdown);
-    }
-
-    fflush(stdout);
     vTaskDelete(NULL);
 }
 
@@ -824,31 +762,18 @@ void app_main(void)
             }
             bechmark_suite();
             break;
-        case 5:
-            //pustam aj performance, lebo niektore zmeny sa nemusia ukazat
-            printf("Starting Keccak Test...\n");
+#if (TEST_TO_TURN == 6)
+        case 6:
+            printf("Entropy test start\n");
             xReturned = xTaskCreatePinnedToCore(
-                            keccak_test_orig, "KECCAK_TEST", MLKEM_API_STACK_SIZE,
+                            entropy_test, "ENTROPY_TEST", MLKEM_API_STACK_SIZE,
                             (void*)1, MLKEM_TASK_PRIORITY,
                             &xHandle, MLKEM_MAIN_CORE);
             if(xReturned != pdPASS) {
-                printf("Keccak test task creation failed\n");
+                printf("Entropy test task creation failed\n");
             }
-            // + benchmark
-            bechmark_suite();
             break;
-// #if (TEST_TO_TURN == 6)
-//         case 6:
-//             printf("Entropy test start\n");
-//             xReturned = xTaskCreatePinnedToCore(
-//                             entropy_test, "ENTROPY_TEST", MLKEM_API_STACK_SIZE,
-//                             (void*)1, MLKEM_TASK_PRIORITY,
-//                             &xHandle, MLKEM_MAIN_CORE);
-//             if(xReturned != pdPASS) {
-//                 printf("Entropy test task creation failed\n");
-//             }
-//             break;
-// #endif
+#endif
         case 10:
             printf("Starting generating vectors...\n");
             xReturned = xTaskCreatePinnedToCore(

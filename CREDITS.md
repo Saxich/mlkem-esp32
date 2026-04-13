@@ -15,7 +15,7 @@ This project is based on and incorporates code from the following projects:
 ## fsegatz/kybesp32
 - URL: https://github.com/fsegatz/kybesp32
 - Accessed: 2026-01-02
-- License: No explicit license found in repository (all rights reserved by default)
+- License: MIT
 - Usage: Project structure, idea for dual-core usage, foundation for the implementation of dual-core, esp_random files
 
 ---
@@ -24,14 +24,15 @@ This project is based on and incorporates code from the following projects:
 - URL: https://github.com/pq-code-package/mlkem-c-embedded/tree/main
 - Accessed: 2026-02-22
 - License: Apache-2.0 OR CC0-1.0
-- Usage: matacc and its mapping in indcpa and belonging funtions, mechanism of indcpa_cmp implemented into indcpa functions
+- Usage: matacc and its mapping in indcpa and related functions, mechanism of indcpa_cmp implemented into indcpa functions
 
 ---
 
 ## wolfSSL
 - URL: https://github.com/wolfSSL/wolfssl
+- Accessed: 2026-01-02
 - License: GPL-3.0-or-later
-- Usage: Polynomial functions and NTT operations, optimalized chi operation of Keccak permutation
+- Usage: Polynomial functions and NTT operations, optimized chi operation of Keccak permutation
 
 ---
 
