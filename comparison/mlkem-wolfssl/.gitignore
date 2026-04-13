@@ -1,0 +1,27 @@
+# Build artifacts
+build/
+sdkconfig
+sdkconfig.old
+*.pyc
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Dependencies
+managed_components/
+dependencies.lock
+
+# Python
+venv/
+.venv/
+
+# Logs
+*.log
+
+# wolfSSL (downloaded by setup script)
+components/wolfssl/

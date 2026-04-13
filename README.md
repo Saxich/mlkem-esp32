@@ -148,7 +148,10 @@ Input buffers are not included in measurements. Heap is non-zero only for DUALCO
 
 ## Comparison
 
-The [comparison/](comparison/) directory contains a separate ESP-IDF project for benchmarking third-party cryptographic libraries against this implementation. Currently includes **wolfSSL**. See [comparison/mlkem-wolfssl/README_wolfssl.md](comparison/mlkem-wolfssl/README_wolfssl.md) for setup and usage.
+The [comparison/](comparison/) directory contains separate ESP-IDF projects for benchmarking other cryptographic libraries against this implementation.
+
+- **wolfSSL** — see [comparison/mlkem-wolfssl/README_wolfssl.md](comparison/mlkem-wolfssl/README_wolfssl.md) for setup and benchmarking instructions
+- **mlkem-native** — see [comparison/mlkem-native/README_mlkem-native.md](comparison/mlkem-native/README_mlkem-native.md) for setup and benchmarking instructions
 
 ## User Manual and Tests
 
