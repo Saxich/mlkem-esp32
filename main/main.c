@@ -657,63 +657,6 @@ double compute_entropy(uint8_t *data, size_t len) {
 }
 
 
-// #if (TEST_TO_TURN == 6)
-// // entropy test
-// #include "randombytes.h"
-// #include <float.h>
-// #define NUM_ITER 100
-// void run_entropy_test(const char *label,
-//                       void (*rng_func)(uint8_t *, size_t)) {
-
-//     VAR_ALIGN uint8_t coins[2 * MLKEM_SYMBYTES*100];
-
-//     double sum = 0.0;
-//     double sum_sq = 0.0;
-//     double min = DBL_MAX;
-//     double max = -DBL_MAX;
-
-//     printf("\n=== %s ===\n", label);
-
-//     for (int i = 0; i < NUM_ITER; i++) {
-
-//         rng_func(coins, sizeof(coins));
-
-//         // for (int i = 0; i <  sizeof(coins); i++)
-//         //     coins[i] = i;
-
-//         double H = compute_entropy(coins, sizeof(coins));
-
-//         if (H < min) min = H;
-//         if (H > max) max = H;
-
-//         sum += H;
-//         sum_sq += H * H;
-//     }
-
-//     double avg = sum / NUM_ITER;
-//     double variance = (sum_sq / NUM_ITER) - (avg * avg);
-//     double stddev = sqrt(variance);
-
-//     printf("Entropy stats over %d runs:\n", NUM_ITER);
-//     printf("Min:    %f bits/byte\n", min);
-//     printf("Max:    %f bits/byte\n", max);
-//     printf("Avg:    %f bits/byte\n", avg);
-//     printf("Stddev: %f\n", stddev);
-// }
-
-// void entropy_test(void *pvParameters)
-// {
-//     run_entropy_test("esp_randombytes", esp_randombytes);
-//     run_entropy_test("esp_randombytes_opt", esp_randombytes_opt);
-//     run_entropy_test("esp_randombytes_bt", esp_randombytes_bt);
-//     run_entropy_test("esp_randombytes_wifi", esp_randombytes_wifi);
-
-//     vTaskDelete(NULL);
-// }
-// #endif
-
-
-
 void app_main(void)
 {
     // Disable watchdog, otherwise ong tasks not resetting watchdogs trigger 
@@ -762,18 +705,6 @@ void app_main(void)
             }
             bechmark_suite();
             break;
-#if (TEST_TO_TURN == 6)
-        case 6:
-            printf("Entropy test start\n");
-            xReturned = xTaskCreatePinnedToCore(
-                            entropy_test, "ENTROPY_TEST", MLKEM_API_STACK_SIZE,
-                            (void*)1, MLKEM_TASK_PRIORITY,
-                            &xHandle, MLKEM_MAIN_CORE);
-            if(xReturned != pdPASS) {
-                printf("Entropy test task creation failed\n");
-            }
-            break;
-#endif
         case 10:
             printf("Starting generating vectors...\n");
             xReturned = xTaskCreatePinnedToCore(

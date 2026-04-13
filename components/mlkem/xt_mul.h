@@ -41,7 +41,7 @@ static inline __attribute__((always_inline)) int32_t XT_MULSH(int32_t s, int32_t
 }
 
 #else
-/* Fallback pre non-Xtensa (unit testy na PC) */
+/* Fallback pre non-Xtensa */
 #define XT_MUL16S(s, t) ((int32_t)(int16_t)(s) * (int32_t)(int16_t)(t))
 #define XT_MUL16U(s, t) ((uint32_t)(uint16_t)(s) * (uint32_t)(uint16_t)(t))
 #define XT_MULL(s, t)   ((int32_t)(s) * (int32_t)(t))

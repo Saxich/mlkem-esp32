@@ -5,9 +5,9 @@
 #define MLKEM_K 4
 
 // #define SPEED
-// #define SPEED_DUALCORE
+#define SPEED_DUALCORE
 
-#define STACK_XTREME
+// #define STACK_XTREME
 // #define STACK
 // #define STACK_DUALCORE
 
@@ -16,13 +16,8 @@
 // 2 = Functions timing analysis
 // 3 = KATtest
 // 4 = KATtest + benchmark
-// 6 = Entropy
 // 10 = Generate vectors
-#define TEST_TO_TURN  1
-
-//KAT 04.04.26 before initial commit, all variants in all safety levels PASSED
-
-
+#define TEST_TO_TURN  10
 
 
 #endif
