@@ -159,6 +159,8 @@ See [USER_MANUAL.md](USER_MANUAL.md) for setup, configuration, build instruction
 
 Automated scripts for performance and memory benchmarking are available in [automat_scripts/](automat_scripts/). See [README_AUTOMAT.md](automat_scripts/README_AUTOMAT.md) for execution instructions.
 
+The [nistkat/](nistkat/) directory contains KAT vectors generated on the ESP32, covering all three ML-KEM security levels (512/768/1024). Input vectors are taken from the [post-quantum-cryptography/KAT](https://github.com/post-quantum-cryptography/KAT/tree/main/MLKEM) project (1000 sets per security level); output vectors are stored as SHA3-256 hashes to fit within flash constraints. The directory is structured as a drop-in replacement for the `nistkat` directory in the pq-crystals/kyber reference implementation, enabling independent verification of correctness. See [nistkat/README_nistkat.md](nistkat/README_nistkat.md) for details.
+
 ## Requirements
 
 - ESP32

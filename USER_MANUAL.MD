@@ -118,9 +118,9 @@ If you are using the repository without modifications, set `TEST_TO_TURN` to one
 |---|---|
 | `1` | Memory benchmark + performance benchmark + integrity check |
 | `2` | Timing analysis of individual functions |
-| `3` | KAT test — verifies output against NIST known answer vectors |
-| `4` | KAT test + benchmark combined, memory performnace can be negatively affected |
-| `10` | Generates test vectors (pk, sk, ct, ss) to stdout |
+| `3` | KAT test; verifies output against known vectors |
+| `4` | KAT test + benchmark combined; memory usage and performance can be negatively affected |
+| `10` | Generates random vector set (pk, sk, ct, ss) to stdout |
 
 ---
 
