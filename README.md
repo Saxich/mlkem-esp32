@@ -150,16 +150,16 @@ Input buffers are not included in measurements. Heap is non-zero only for DUALCO
 
 The [comparison/](comparison/) directory contains separate ESP-IDF projects for benchmarking other cryptographic libraries against this implementation.
 
-- **wolfSSL** — see [comparison/mlkem-wolfssl/README_wolfssl.md](comparison/mlkem-wolfssl/README_wolfssl.md) for setup and benchmarking instructions
-- **mlkem-native** — see [comparison/mlkem-native/README_mlkem-native.md](comparison/mlkem-native/README_mlkem-native.md) for setup and benchmarking instructions
+- **wolfSSL** — see [comparison/mlkem-wolfssl/README.md](comparison/mlkem-wolfssl/README.md) for setup and benchmarking instructions
+- **mlkem-native** — see [comparison/mlkem-native/README.md](comparison/mlkem-native/README.md) for setup and benchmarking instructions
 
 ## User Manual and Tests
 
 See [USER_MANUAL.md](USER_MANUAL.md) for setup, configuration, build instructions, implemented tests, and their usage.
 
-Automated scripts for performance and memory benchmarking are available in [automat_scripts/](automat_scripts/). See [README_AUTOMAT.md](automat_scripts/README_AUTOMAT.md) for execution instructions.
+Automated scripts for performance and memory benchmarking are available in [automat_scripts/](automat_scripts/). See [automat_scripts/README.md](automat_scripts/README.md) for execution instructions.
 
-The [nistkat/](nistkat/) directory contains KAT vectors generated on the ESP32, covering all three ML-KEM security levels (512/768/1024). Input vectors are taken from the [post-quantum-cryptography/KAT](https://github.com/post-quantum-cryptography/KAT/tree/main/MLKEM) project (1000 sets per security level); output vectors are stored as SHA3-256 hashes to fit within flash constraints. The directory is structured as a drop-in replacement for the `nistkat` directory in the pq-crystals/kyber reference implementation, enabling independent verification of correctness. See [nistkat/README_nistkat.md](nistkat/README_nistkat.md) for details.
+The [nistkat/](nistkat/) directory contains KAT vectors generated on the ESP32, covering all three ML-KEM security levels (512/768/1024). Input vectors are taken from the [post-quantum-cryptography/KAT](https://github.com/post-quantum-cryptography/KAT/tree/main/MLKEM) project (1000 sets per security level); output vectors are stored as SHA3-256 hashes to fit within flash constraints. The directory is structured as a drop-in replacement for the `nistkat` directory in the pq-crystals/kyber reference implementation, enabling independent verification of correctness. See [nistkat/README.md](nistkat/README.md) for details.
 
 ## Requirements
 
