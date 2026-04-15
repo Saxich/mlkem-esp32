@@ -1,63 +1,70 @@
 #ifndef WOLFSSL_USER_SETTINGS_H
 #define WOLFSSL_USER_SETTINGS_H
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
 
+// =============================================================================
+// ML-KEM security level selection
+// =============================================================================
+// Set MLKEM_VERSION to one of: 512, 768, or 1024.
+//   512  — NIST Level 1 (~AES-128)  
+//   768  — NIST Level 3 (~AES-192) 
+//   1024 — NIST Level 5 (~AES-256) 
+#define MLKEM_VERSION  768
 
-
-/* 
-    ladenie
-*/
-
-/*SHA3*/
-// #define SHA3_BY_SPEC //-32b stack, +0.5ms speed, +500b image, neviem aky nasledok s small
-// #define WOLFSSL_SHA3_SMALL //-~300b stack, +1.3ms speed, -4500b image
-
-/*MLKEM*/
-// #define WOLFSSL_MLKEM_MAKEKEY_SMALL_MEM  //+50b stack, +0ms speed, +100b image
-// #define WOLFSSL_MLKEM_ENCAPSULATE_SMALL_MEM //-5700b heap, +192b stack, +0.1ms (gen+0), +912b image
-// #define WOLFSSL_MLKEM_CACHE_A //+8208b stack, +0.0ms, +128b image - nepouzitelne pre nas test, jelikoz nevykonavam loop(gen->enc->dec) ale samostane loop
-
-/*MLKEM polz*/
-// #define WOLFSSL_MLKEM_NO_LARGE_CODE  //+~0.2ms, -7012b image
-// #define WOLFSSL_MLKEM_SMALL   //~+0.4ms, -74028b image
-// #define WOLFSSL_SMALL_STACK  //+780b heap, -176b stack,  ~+0.05ms speed, -56b image
-// #define WOLFSSL_MLKEM_NTT_UNROLL  // +~0.03ms, -2556b iamge
-// #define WOLFSSL_MLKEM_INVNTT_UNROLL // +0ms, -1256 iamge
-
+// =============================================================================
+// Optimization profile — uncomment exactly one
+// =============================================================================
+// OPT_SPEED      — maximum speed; default wolfSSL behaviour, no size reductions
+// OPT_LOW_RAM    — minimize stack+heap; slower and larger flash image
+// OPT_IMAGE_SIZE — minimize flash image; slightly more RAM, slightly slower
+// OPT_BALANCED   — best overall trade-off for ESP32
+// =============================================================================
+// #define OPT_SPEED
+// #define OPT_LOW_RAM
+// #define OPT_IMAGE_SIZE
 #define OPT_BALANCED
 
+// =============================================================================
+// DO NOT EDIT BELOW THIS LINE
+// =============================================================================
+
+#if MLKEM_VERSION != 512 && MLKEM_VERSION != 768 && MLKEM_VERSION != 1024
+    #error "MLKEM_VERSION must be 512, 768, or 1024"
+#endif
+
+// =============================================================================
+// Optimization profile implementations
+// =============================================================================
 #ifdef OPT_SPEED
+    // Speed is the default wolfSSL behaviour — no extra flags needed.
 #endif
 
-#ifdef OPT_LOW_RAM /*stack+heap*/
-    #define WOLFSSL_SHA3_SMAL
-    #define WOLFSSL_MLKEM_ENCAPSULATE_SMALL_MEM
-    #define SHA3_BY_SPEC //extremne spomaluke
-    #define WOLFSSL_MLKEM_NO_LARGE_CODE //11684, 6148
-#endif
-
-#ifdef OPT_IMAGE_SIZE
+#ifdef OPT_LOW_RAM   /* minimizes combined stack + heap */
     #define WOLFSSL_SHA3_SMALL
-    #define WOLFSSL_MLKEM_NO_LARGE_CODE  
-    #define WOLFSSL_MLKEM_SMALL   
-    // #define WOLFSSL_SMALL_STACK  //vyradenen lebo pridava +780b heap, +900b image pri kombinacii
-    #define WOLFSSL_MLKEM_NTT_UNROLL  
-    #define WOLFSSL_MLKEM_INVNTT_UNROLL 
+    #define WOLFSSL_MLKEM_ENCAPSULATE_SMALL_MEM
+    #define SHA3_BY_SPEC                    // extremely slow
+    #define WOLFSSL_MLKEM_NO_LARGE_CODE
 #endif
 
-#ifdef OPT_BALANCED
+#ifdef OPT_IMAGE_SIZE   /* minimizes flash footprint */
+    #define WOLFSSL_SHA3_SMALL
+    #define WOLFSSL_MLKEM_NO_LARGE_CODE
+    #define WOLFSSL_MLKEM_SMALL
+    // WOLFSSL_SMALL_STACK excluded: adds +780B heap and +900B flash when
+    // combined with the other flags above, negating the image-size benefit
+    #define WOLFSSL_MLKEM_NTT_UNROLL
+    #define WOLFSSL_MLKEM_INVNTT_UNROLL
+#endif
+
+#ifdef OPT_BALANCED  
     #define WOLFSSL_MLKEM_ENCAPSULATE_SMALL_MEM
     #define WOLFSSL_MLKEM_NO_LARGE_CODE
     #define WOLFSSL_MLKEM_NTT_UNROLL
     #define WOLFSSL_MLKEM_INVNTT_UNROLL
 #endif
 
-
-
-
-/* ESP-IDF + wolfSSL povinne */
+// =============================================================================
+// wolfSSL / ESP-IDF mandatory settings
+// =============================================================================
 #define WOLFSSL_USER_SETTINGS
 #define WOLFCRYPT_ONLY
 #define SINGLE_THREADED
@@ -65,41 +72,39 @@
 #define WOLFSSL_SHAKE128
 #define WOLFSSL_SHAKE256
 #define WOLFSSL_HAVE_MLKEM
-#define WOLFSSL_WC_MLKEM  
-#define NO_SPHINCS_PLUS   
-/* esp_random RNG*/  
-#define WOLFSSL_ESPIDF
-/* bezpecnostna verzia ML-KEM*/           
-#if USE_MLKEM_512
+#define WOLFSSL_WC_MLKEM
+#define NO_SPHINCS_PLUS
+#define WOLFSSL_ESPIDF              /* use esp_random() as the RNG source */
+
+/* Enable only the wolfSSL ML-KEM variant matching the selected level */
+#if MLKEM_VERSION == 512
     #define WOLFSSL_WC_ML_KEM_512
-#elif USE_MLKEM_1024
+#elif MLKEM_VERSION == 1024
     #define WOLFSSL_WC_ML_KEM_1024
 #else
-    #define WOLFSSL_WC_ML_KEM_768     //  default
+    #define WOLFSSL_WC_ML_KEM_768
 #endif
 
-// #define WOLFSSL_SHA3
-// #define WOLFSSL_SHAKE128
-// #define WOLFSSL_SHAKE256
-// #undef WOLFSSL_LIBOQS
-// #define WOLFSSL_MLKEM_EXPERIMENTAL     /* explicitly marks it as experimental */
-// #define WOLFCRYPT_HAVE_MLKEM_NATIVE  /* Forces native impl (key for v6.1+) */
-// #define WOLFSSL_HAVE_PQ      /* General PQ suite */
-// #define NO_LIBOQS     
-// #define WOLFSSL_ESPIDF
-// #define WOLFSSL_ESPWROOM32
-// #define NO_WOLFSSL_MEMORY
-// #define HAVE_HASHDRBG
-// #define USE_FAST_MATH
-// #define TFM_TIMING_RESISTANT
-// #define WC_RNG_SEED_CB
-// #define WOLFSSL_ESP32_CRYPT
-
-// #undef WC_NO_HARDEN   /* removes side-channel warning */
-// #ifdef __cplusplus
-
-// #define WOLFSSL_ESP32_CRYPT
-// #define WC_RNG_SEED_CB        /* tells wolfSSL to use ESP32 TRNG */
-// }
-// #endif
+// =============================================================================
+// Derived key/ciphertext sizes for the selected level
+// =============================================================================
+#if MLKEM_VERSION == 512
+    #define MLKEM_LEVEL               WC_ML_KEM_512
+    #define CRYPTO_PUBLICKEYBYTES     WC_ML_KEM_512_PUBLIC_KEY_SIZE      // 800
+    #define CRYPTO_SECRETKEYBYTES     WC_ML_KEM_512_PRIVATE_KEY_SIZE     // 1632
+    #define CRYPTO_CIPHERTEXTBYTES    WC_ML_KEM_512_CIPHER_TEXT_SIZE     // 768
+#elif MLKEM_VERSION == 1024
+    #define MLKEM_LEVEL               WC_ML_KEM_1024
+    #define CRYPTO_PUBLICKEYBYTES     WC_ML_KEM_1024_PUBLIC_KEY_SIZE     // 1568
+    #define CRYPTO_SECRETKEYBYTES     WC_ML_KEM_1024_PRIVATE_KEY_SIZE    // 3168
+    #define CRYPTO_CIPHERTEXTBYTES    WC_ML_KEM_1024_CIPHER_TEXT_SIZE    // 1568
+#else  /* 768 */
+    #define MLKEM_LEVEL               WC_ML_KEM_768
+    #define CRYPTO_PUBLICKEYBYTES     WC_ML_KEM_768_PUBLIC_KEY_SIZE      // 1184
+    #define CRYPTO_SECRETKEYBYTES     WC_ML_KEM_768_PRIVATE_KEY_SIZE     // 2400
+    #define CRYPTO_CIPHERTEXTBYTES    WC_ML_KEM_768_CIPHER_TEXT_SIZE     // 1088
 #endif
+
+#define CRYPTO_BYTES  32 
+
+#endif /* WOLFSSL_USER_SETTINGS_H */

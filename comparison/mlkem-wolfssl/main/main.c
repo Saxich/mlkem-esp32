@@ -18,35 +18,6 @@
 static WC_RNG g_rng;
 
 // =============================================================================
-// konfiguracia urovne
-// =============================================================================
-#define USE_MLKEM_512    0
-#define USE_MLKEM_768    1
-#define USE_MLKEM_1024   0
-
-#if (USE_MLKEM_512 + USE_MLKEM_768 + USE_MLKEM_1024) != 1
-    #error "Exactly one ML-KEM level must be set to 1"
-#endif
-
-#if USE_MLKEM_512 == 1
-    #define MLKEM_LEVEL               WC_ML_KEM_512
-    #define CRYPTO_PUBLICKEYBYTES     WC_ML_KEM_512_PUBLIC_KEY_SIZE      // 800
-    #define CRYPTO_SECRETKEYBYTES     WC_ML_KEM_512_PRIVATE_KEY_SIZE     // 1632
-    #define CRYPTO_CIPHERTEXTBYTES    WC_ML_KEM_512_CIPHER_TEXT_SIZE     // 768
-#elif USE_MLKEM_1024 == 1
-    #define MLKEM_LEVEL               WC_ML_KEM_1024
-    #define CRYPTO_PUBLICKEYBYTES     WC_ML_KEM_1024_PUBLIC_KEY_SIZE     // 1568
-    #define CRYPTO_SECRETKEYBYTES     WC_ML_KEM_1024_PRIVATE_KEY_SIZE    // 3168
-    #define CRYPTO_CIPHERTEXTBYTES    WC_ML_KEM_1024_CIPHER_TEXT_SIZE    // 1568
-#else  /* default = ML-KEM-768 */
-    #define MLKEM_LEVEL               WC_ML_KEM_768
-    #define CRYPTO_PUBLICKEYBYTES     WC_ML_KEM_768_PUBLIC_KEY_SIZE      // 1184
-    #define CRYPTO_SECRETKEYBYTES     WC_ML_KEM_768_PRIVATE_KEY_SIZE     // 2400
-    #define CRYPTO_CIPHERTEXTBYTES    WC_ML_KEM_768_CIPHER_TEXT_SIZE     // 1088
-#endif
-
-#define CRYPTO_BYTES                  32   // always 32 bytes shared secret
-// =============================================================================
 //  Api pre moj main
 // =============================================================================
 static int crypto_kem_keypair(uint8_t *pk, uint8_t *sk)

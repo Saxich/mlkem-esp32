@@ -70,23 +70,42 @@ Save and exit (`S` → `Q`).
 
 ### 5. Select ML-KEM security level
 
-Edit [main/main.c](main/main.c) lines 23–25:
+Edit `MLKEM_VERSION` at the top of [main/user_settings.h](main/user_settings.h):
 
 ```c
-#define USE_MLKEM_512    0
-#define USE_MLKEM_768    1   // ← change this
-#define USE_MLKEM_1024   0
+#define MLKEM_VERSION  768   // set to 512, 768, or 1024
 ```
 
-Exactly one must be `1`.
+| Value | NIST Level | Public key | Ciphertext |
+|-------|-----------|-----------|------------|
+| 512   | 1 (~AES-128) | 800 B  | 768 B  |
+| 768   | 3 (~AES-192) | 1184 B | 1088 B |
+| 1024  | 5 (~AES-256) | 1568 B | 1568 B |
 
-### 6. Build
+An invalid value will produce a compile-time error.
+
+### 6. Select optimization profile
+
+Edit the active `OPT_` define directly below `MLKEM_VERSION` in [main/user_settings.h](main/user_settings.h):
+
+```c
+// #define OPT_SPEED       // max speed; default wolfSSL behaviour
+// #define OPT_LOW_RAM     // minimize stack + heap
+// #define OPT_IMAGE_SIZE  // minimize flash footprint
+#define OPT_BALANCED       // recommended: best speed/RAM/flash trade-off
+```
+
+Uncomment exactly one profile. `OPT_BALANCED` is the default and recommended setting for benchmarks.
+
+> Performance comparisons across all profiles are available in [results_mods/graphs/](results_mods/graphs/).
+
+### 7. Build
 
 ```bash
 idf.py build
 ```
 
-### 7. Flash and monitor
+### 8. Flash and monitor
 
 ```bash
 idf.py flash monitor -p COMx   # Windows (e.g. COM5)
