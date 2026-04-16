@@ -90,8 +90,8 @@ Edit the active `OPT_` define directly below `MLKEM_VERSION` in [main/user_setti
 
 ```c
 // #define OPT_SPEED       // max speed; default wolfSSL behaviour
-// #define OPT_LOW_RAM     // minimize stack + heap
-// #define OPT_IMAGE_SIZE  // minimize flash footprint
+// #define OPT_STACK     // minimize stack + heap
+// #define OPT_SIZE  // minimize flash footprint
 #define OPT_BALANCED       // recommended: best speed/RAM/flash trade-off
 ```
 

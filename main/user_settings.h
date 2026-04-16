@@ -4,8 +4,8 @@
 
 #define MLKEM_K 4
 
-// #define SPEED
-#define SPEED_DUALCORE
+#define SPEED
+// #define SPEED_DUALCORE
 
 // #define STACK_XTREME
 // #define STACK
@@ -17,7 +17,7 @@
 // 3 = KATtest
 // 4 = KATtest + benchmark
 // 10 = Generate vectors
-#define TEST_TO_TURN  10
+#define TEST_TO_TURN  1
 
 
 #endif

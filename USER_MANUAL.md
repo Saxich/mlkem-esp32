@@ -179,3 +179,4 @@ For maximum entropy quality, ensure Wi-Fi or BT is initialized when using the cr
 
 Reference: [ESP32 Technical Reference Manual, Section 18 — Random Number Generator](https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf)
 
+

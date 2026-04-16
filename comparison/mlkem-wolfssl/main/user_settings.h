@@ -14,13 +14,13 @@
 // Optimization profile — uncomment exactly one
 // =============================================================================
 // OPT_SPEED      — maximum speed; default wolfSSL behaviour, no size reductions
-// OPT_LOW_RAM    — minimize stack+heap; slower and larger flash image
-// OPT_IMAGE_SIZE — minimize flash image; slightly more RAM, slightly slower
+// OPT_STACK    — minimize stack+heap; slower and larger flash image
+// OPT_SIZE — minimize flash image; slightly more RAM, slightly slower
 // OPT_BALANCED   — best overall trade-off for ESP32
 // =============================================================================
 // #define OPT_SPEED
-// #define OPT_LOW_RAM
-// #define OPT_IMAGE_SIZE
+// #define OPT_STACK
+// #define OPT_SIZE
 #define OPT_BALANCED
 
 // =============================================================================
@@ -38,14 +38,14 @@
     // Speed is the default wolfSSL behaviour — no extra flags needed.
 #endif
 
-#ifdef OPT_LOW_RAM   /* minimizes combined stack + heap */
+#ifdef OPT_STACK   /* minimizes combined stack + heap */
     #define WOLFSSL_SHA3_SMALL
     #define WOLFSSL_MLKEM_ENCAPSULATE_SMALL_MEM
     #define SHA3_BY_SPEC                    // extremely slow
     #define WOLFSSL_MLKEM_NO_LARGE_CODE
 #endif
 
-#ifdef OPT_IMAGE_SIZE   /* minimizes flash footprint */
+#ifdef OPT_SIZE   /* minimizes flash footprint */
     #define WOLFSSL_SHA3_SMALL
     #define WOLFSSL_MLKEM_NO_LARGE_CODE
     #define WOLFSSL_MLKEM_SMALL
