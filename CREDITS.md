@@ -16,7 +16,7 @@ This project is based on and incorporates code from the following projects:
 - URL: https://github.com/fsegatz/kybesp32
 - Accessed: 2026-01-02
 - License: MIT
-- Usage: Project structure, idea for dual-core usage, foundation for the implementation of dual-core, esp_random files
+- Usage: Project structure, idea for dual-core usage and foundation for the implementation of dual-core
 
 ---
 

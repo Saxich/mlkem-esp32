@@ -29,6 +29,12 @@ Selected by defining exactly one macro in `main/user_settings.h`:
 
 > For more details see the thesis *(will be added)*.
 
+## Security Features
+
+- **Sensitive intermediate value zeroization** — all local buffers containing secret material (polynomials, seeds, noise vectors) are zeroed after use via `buffer_zeroize`, which uses `volatile` writes to prevent compiler removal as dead code (per FIPS 203 §3.3)
+- **SP 800-90C RBG1 construction** — `esp_randombytes()` is backed by CTR_DRBG(AES-256) seeded exclusively from the ESP32 hardware TRNG via the PSA Crypto API; no software seed, no fixed entropy source
+- **Error propagation** — dual-core task creation failures are caught and propagated up through PKE return values to the KEM API level
+
 ## Performance
 
 Raw benchmark data and graphs are in [results/](results/).

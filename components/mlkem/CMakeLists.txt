@@ -18,6 +18,7 @@ idf_component_register(
         test_time
         fips202
         esp_rom
+        mbedtls
         # esp_wifi
         # bt
 )

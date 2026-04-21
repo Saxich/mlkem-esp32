@@ -634,29 +634,6 @@ void timing_analysis_test_wrapper(void *pvParameters){
 }
 
 
-
-double compute_entropy(uint8_t *data, size_t len) {
-    int freq[256] = {0};
-
-    // Count occurrences
-    for (size_t i = 0; i < len; i++) {
-        freq[data[i]]++;
-    }
-
-    double entropy = 0.0;
-
-    // Compute entropy
-    for (int i = 0; i < 256; i++) {
-        if (freq[i] > 0) {
-            double p = (double)freq[i] / len;
-            entropy -= p * log2(p);
-        }
-    }
-
-    return entropy; // bits per byte
-}
-
-
 void app_main(void)
 {
     // Disable watchdog, otherwise ong tasks not resetting watchdogs trigger 
