@@ -17,7 +17,7 @@
 // 3 = KATtest
 // 4 = KATtest + benchmark
 // 10 = Generate vectors
-#define TEST_TO_TURN  1
+#define TEST_TO_TURN  3
 
 
 #endif

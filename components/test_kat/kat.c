@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "kem.h"
 #include "indcpa.h"
 #include "fips202.h"

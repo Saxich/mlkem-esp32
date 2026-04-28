@@ -1,0 +1,6 @@
+build/
+sdkconfig
+sdkconfig.old
+mlkem/
+fips202/
+hal/

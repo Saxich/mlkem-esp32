@@ -48,13 +48,13 @@ This will:
 idf.py set-target esp32
 ```
 
-### 4. Configure optimization level (important for accurate benchmarks)
+### 4. Configure menuconfig (optional)
 
 ```bash
 idf.py menuconfig
 ```
 
-Navigate to:
+**Optimization level** *(TODO: decide which)*
 
 ```
 Component config
@@ -63,8 +63,16 @@ Component config
       → (●) Optimize for performance (-O2)
 ```
 
-> **Default is "Debug" (`-Og`) which is slower than `-O2`.**
-> Always use "Optimize for performance" when running benchmarks.
+> Default is "Debug" (`-Og`). You may switch to `-O2`, but results at `-Og` are still valid benchmarks.
+
+**CPU frequency** *(optional)*
+
+```
+(Top)
+  → Component config
+    → ESP System Settings
+      → CPU frequency
+```
 
 Save and exit (`S` → `Q`).
 

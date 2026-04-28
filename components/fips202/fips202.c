@@ -1038,8 +1038,8 @@ void KeccakP1600_Permute_Nrounds(KeccakP1600_plain32_state *state, unsigned int 
         switch ( nRounds )
         {
             case 0: KeccakRound0(); /* fall through */
-            case 3: KeccakRound1();
-            case 2: KeccakRound2();
+            case 3: KeccakRound1(); /* fall through */
+            case 2: KeccakRound2(); /* fall through */
             case 1: KeccakRound3();
         }
         nRounds = 0;
@@ -1122,8 +1122,6 @@ static void keccak_absorb(KeccakP1600_plain32_state *state,
                           size_t inputByteLen,
                           uint8_t delimitedSuffix)
 {
-    size_t blockSize = 0;
-
     KeccakP1600_Initialize(state);
 
     // Absorb full blocks
