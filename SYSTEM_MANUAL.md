@@ -1,4 +1,4 @@
-# USER MANUAL — mlkem-esp32
+# SYSTEM MANUAL — mlkem-esp32
 
 ---
 
