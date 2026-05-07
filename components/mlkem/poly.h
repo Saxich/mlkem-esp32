@@ -14,6 +14,21 @@ typedef struct{
   int16_t coeffs[MLKEM_N];
 } poly;
 
+#ifdef SPEED_CODE
+typedef struct {
+    int16_t coeffs[MLKEM_N / 2];
+} poly_mulcache;
+
+#define poly_mulcache_compute MLKEM_NAMESPACE(poly_mulcache_compute)
+void poly_mulcache_compute(poly_mulcache *x, const poly *a);
+
+#define poly_basemul_montgomery_cached MLKEM_NAMESPACE(poly_basemul_montgomery_cached)
+void poly_basemul_montgomery_cached(int16_t *r, const int16_t *a, const int16_t *b, const int16_t *cache);
+
+#define poly_basemul_acc_montgomery_cached MLKEM_NAMESPACE(poly_basemul_acc_montgomery_cached)
+void poly_basemul_acc_montgomery_cached(int16_t *r, const int16_t *a, const int16_t *b, const int16_t *cache);
+#endif
+
 // common
 #define poly_compress MLKEM_NAMESPACE(poly_compress)
 void poly_compress(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES], const poly *a);

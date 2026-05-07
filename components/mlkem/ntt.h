@@ -21,4 +21,10 @@ void basemul(int16_t* r, const int16_t* a, const int16_t* b, int16_t zeta);
 #define basemul_acc MLKEM_NAMESPACE(basemul_acc)
 void basemul_acc(int16_t* r, const int16_t* a, const int16_t* b, int16_t zeta);
 
+#define basemul_cached MLKEM_NAMESPACE(basemul_cached)
+void basemul_cached(int16_t* r, const int16_t* a, const int16_t* b, int16_t b1_zeta);
+
+#define basemul_acc_cached MLKEM_NAMESPACE(basemul_acc_cached)
+void basemul_acc_cached(int16_t* r, const int16_t* a, const int16_t* b, int16_t b1_zeta);
+
 #endif

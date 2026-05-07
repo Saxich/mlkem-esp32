@@ -233,6 +233,7 @@ typedef struct IndcpaKeypairData_t {
   uint8_t * sk;
   uint8_t buf[2*MLKEM_SYMBYTES];
   polyvec a[MLKEM_K], e, pkpv, skpv;
+  polyvec_mulcache skpv_cache;
 
   TaskHandle_t main_task_handle;
   TaskHandle_t support_task_handle;
@@ -273,6 +274,7 @@ void indcpa_keypair_SUPPORT_CORE(void *xStruct) {
     ulTaskNotifyTake(pdFALSE, portMAX_DELAY);
     portMEMORY_BARRIER();
     poly_ntt(&data->skpv.vec[2]);
+    polyvec_mulcache_compute(&data->skpv_cache, &data->skpv);
     ulTaskNotifyTake(pdFALSE, portMAX_DELAY);
     portMEMORY_BARRIER();
     poly_ntt(&data->e.vec[0]);
@@ -281,6 +283,7 @@ void indcpa_keypair_SUPPORT_CORE(void *xStruct) {
   #else  //(MLKEM_K == 2 || MLKEM_K == 4)
 
     polyvec_ntt(&data->skpv);
+    polyvec_mulcache_compute(&data->skpv_cache, &data->skpv);
 
     // Signal Core MAIN NTT is ready for MVM
     portMEMORY_BARRIER();
@@ -327,7 +330,7 @@ void indcpa_keypair_SUPPORT_CORE(void *xStruct) {
     // full MVP poly 2
     // for (unsigned int i = CORE1_MVM_START; i <= CORE1_MVM_END; i++) {
       // A*s
-      polyvec_basemul_acc_montgomery(&data->pkpv.vec[2], &data->a[2], &data->skpv);
+      polyvec_basemul_acc_montgomery_cached(&data->pkpv.vec[2], &data->a[2], &data->skpv, &data->skpv_cache);
       poly_tomont(&data->pkpv.vec[2]);
       //+e
       poly_add(&data->pkpv.vec[2], &data->pkpv.vec[2], &data->e.vec[2]);
@@ -350,7 +353,7 @@ void indcpa_keypair_SUPPORT_CORE(void *xStruct) {
     // full MVP per Core
     for (unsigned int i = CORE1_MVM_START; i <= CORE1_MVM_END; i++) {
       // A*s
-      polyvec_basemul_acc_montgomery(&data->pkpv.vec[i], &data->a[i], &data->skpv);
+      polyvec_basemul_acc_montgomery_cached(&data->pkpv.vec[i], &data->a[i], &data->skpv, &data->skpv_cache);
       poly_tomont(&data->pkpv.vec[i]);
       //+e
       poly_add(&data->pkpv.vec[i], &data->pkpv.vec[i], &data->e.vec[i]);
@@ -480,12 +483,12 @@ int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
   // before last 3 same calls of each Core, in average, Core MAIN is 51878c abd SUPP is 44928c vs original 89956:44978 ratio in normal split
   // benchmark result: this split is 13600cycles faster (-1%), adds 2400b on HEAP (+18,7%). Average values for evaluation could be reason for smaller then expected gain.
     // basemul poly 0
-    polyvec_basemul_acc_montgomery(&xStruct.pkpv.vec[0], &xStruct.a[0], &xStruct.skpv);
+    polyvec_basemul_acc_montgomery_cached(&xStruct.pkpv.vec[0], &xStruct.a[0], &xStruct.skpv, &xStruct.skpv_cache);
     // Signal Core SUPPORT it can finish poly 0, corrective, small percentage of KAT failed without
     portMEMORY_BARRIER();
     xTaskNotifyGive(xStruct.support_task_handle);
     // full MVP poly 1
-    polyvec_basemul_acc_montgomery(&xStruct.pkpv.vec[1], &xStruct.a[1], &xStruct.skpv);
+    polyvec_basemul_acc_montgomery_cached(&xStruct.pkpv.vec[1], &xStruct.a[1], &xStruct.skpv, &xStruct.skpv_cache);
     // around this time Core SUPPORT did full MVP poly 2 and can continue finihsing poly 0
     poly_tomont(&xStruct.pkpv.vec[1]);
     poly_add(&xStruct.pkpv.vec[1], &xStruct.pkpv.vec[1], &xStruct.e.vec[1]);
@@ -502,7 +505,7 @@ int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
     // full MVP per Core
     for (unsigned int i = CORE0_MVM_START; i <= CORE0_MVM_END; i++) {
       // A*s
-      polyvec_basemul_acc_montgomery(&xStruct.pkpv.vec[i], &xStruct.a[i], &xStruct.skpv);
+      polyvec_basemul_acc_montgomery_cached(&xStruct.pkpv.vec[i], &xStruct.a[i], &xStruct.skpv, &xStruct.skpv_cache);
       poly_tomont(&xStruct.pkpv.vec[i]);
       //+e
       poly_add(&xStruct.pkpv.vec[i], &xStruct.pkpv.vec[i], &xStruct.e.vec[i]);
@@ -522,11 +525,12 @@ int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
   ulTaskNotifyTake(pdFALSE, portMAX_DELAY);  
 
   // Nicenie medzivysledkov podla FIP203 Section 3.3
-  buffer_zeroize(xStruct.buf,    sizeof(xStruct.buf));
-  buffer_zeroize(&xStruct.a,     sizeof(xStruct.a));
-  buffer_zeroize(&xStruct.pkpv,  sizeof(xStruct.pkpv));
-  buffer_zeroize(&xStruct.skpv,  sizeof(xStruct.skpv));
-  buffer_zeroize(&xStruct.e,     sizeof(xStruct.e));
+  buffer_zeroize(xStruct.buf,          sizeof(xStruct.buf));
+  buffer_zeroize(&xStruct.a,           sizeof(xStruct.a));
+  buffer_zeroize(&xStruct.pkpv,        sizeof(xStruct.pkpv));
+  buffer_zeroize(&xStruct.skpv,        sizeof(xStruct.skpv));
+  buffer_zeroize(&xStruct.skpv_cache,  sizeof(xStruct.skpv_cache));
+  buffer_zeroize(&xStruct.e,           sizeof(xStruct.e));
 
   //end of indcpa_keypair
   return 0;
@@ -558,10 +562,13 @@ int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
   polyvec_ntt(&skpv);
   polyvec_ntt(&e);
 
+  polyvec_mulcache skpv_cache;
+  polyvec_mulcache_compute(&skpv_cache, &skpv);
+
   // --- Matrix-vector multiplication ---
   for (i = 0; i < MLKEM_K; i++) {
     // A*s
-    polyvec_basemul_acc_montgomery(&pkpv.vec[i], &a[i], &skpv);
+    polyvec_basemul_acc_montgomery_cached(&pkpv.vec[i], &a[i], &skpv, &skpv_cache);
     poly_tomont(&pkpv.vec[i]);
     //+e
     poly_add(&pkpv.vec[i], &pkpv.vec[i], &e.vec[i]);
@@ -573,12 +580,13 @@ int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
   pack_pk(pk, &pkpv, publicseed);
 
   // Nicenie medzivysledkov podla FIP203 Section 3.3
-  buffer_zeroize(buf,   sizeof(buf));
-  buffer_zeroize(&skpv, sizeof(skpv));
-  buffer_zeroize(&e,    sizeof(e));
-  buffer_zeroize(&a,    sizeof(a));
-  buffer_zeroize(&pkpv, sizeof(pkpv));
-  buffer_zeroize(&nonce, sizeof(nonce));
+  buffer_zeroize(buf,         sizeof(buf));
+  buffer_zeroize(&skpv,       sizeof(skpv));
+  buffer_zeroize(&skpv_cache, sizeof(skpv_cache));
+  buffer_zeroize(&e,          sizeof(e));
+  buffer_zeroize(&a,          sizeof(a));
+  buffer_zeroize(&pkpv,       sizeof(pkpv));
+  buffer_zeroize(&nonce,      sizeof(nonce));
 
   return 0;
 }

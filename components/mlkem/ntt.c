@@ -321,3 +321,18 @@ void basemul_acc(int16_t* r, const int16_t* a, const int16_t* b, int16_t zeta)
     /* Step 2: c1 = a0*b1 + a1*b0 */
     r[1] += MLKEM_MONT_RED(XT_MUL16S(a0, b1) + XT_MUL16S(a1, b0));
 }
+
+/* b1_zeta = MLKEM_MONT_RED(b[1] * zeta), predpočítané v mulcache */
+void basemul_cached(int16_t* r, const int16_t* a, const int16_t* b, int16_t b1_zeta)
+{
+    int16_t a0 = a[0], a1 = a[1], b0 = b[0], b1 = b[1];
+    r[0] = MLKEM_MONT_RED(XT_MUL16S(a1, b1_zeta) + XT_MUL16S(a0, b0));
+    r[1] = MLKEM_MONT_RED(XT_MUL16S(a0, b1) + XT_MUL16S(a1, b0));
+}
+
+void basemul_acc_cached(int16_t* r, const int16_t* a, const int16_t* b, int16_t b1_zeta)
+{
+    int16_t a0 = a[0], a1 = a[1], b0 = b[0], b1 = b[1];
+    r[0] += MLKEM_MONT_RED(XT_MUL16S(a1, b1_zeta) + XT_MUL16S(a0, b0));
+    r[1] += MLKEM_MONT_RED(XT_MUL16S(a0, b1) + XT_MUL16S(a1, b0));
+}

@@ -323,8 +323,57 @@ void poly_basemul_acc_montgomery(int16_t* r, const int16_t* a, const int16_t* b)
         basemul_acc(r + i + 12, a + i + 12, b + i + 12,  zeta[3]);
         basemul_acc(r + i + 14, a + i + 14, b + i + 14, -zeta[3]);
     }
-
 }
+
+#ifdef SPEED_CODE
+void poly_mulcache_compute(poly_mulcache *x, const poly *a)
+{
+    const int16_t *zeta = zetas + 64;
+    const int16_t *b = a->coeffs;
+    int16_t *c = x->coeffs;
+    unsigned int i, ci = 0;
+    for (i = 0; i < MLKEM_N; i += 16, zeta += 4) {
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+ 1],  zeta[0]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+ 3], -zeta[0]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+ 5],  zeta[1]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+ 7], -zeta[1]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+ 9],  zeta[2]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+11], -zeta[2]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+13],  zeta[3]));
+        c[ci++] = MLKEM_MONT_RED(XT_MUL16S(b[i+15], -zeta[3]));
+    }
+}
+
+void poly_basemul_montgomery_cached(int16_t *r, const int16_t *a, const int16_t *b, const int16_t *cache)
+{
+    unsigned int i, ci = 0;
+    for (i = 0; i < MLKEM_N; i += 16, ci += 8) {
+        basemul_cached(r + i +  0, a + i +  0, b + i +  0, cache[ci+0]);
+        basemul_cached(r + i +  2, a + i +  2, b + i +  2, cache[ci+1]);
+        basemul_cached(r + i +  4, a + i +  4, b + i +  4, cache[ci+2]);
+        basemul_cached(r + i +  6, a + i +  6, b + i +  6, cache[ci+3]);
+        basemul_cached(r + i +  8, a + i +  8, b + i +  8, cache[ci+4]);
+        basemul_cached(r + i + 10, a + i + 10, b + i + 10, cache[ci+5]);
+        basemul_cached(r + i + 12, a + i + 12, b + i + 12, cache[ci+6]);
+        basemul_cached(r + i + 14, a + i + 14, b + i + 14, cache[ci+7]);
+    }
+}
+
+void poly_basemul_acc_montgomery_cached(int16_t *r, const int16_t *a, const int16_t *b, const int16_t *cache)
+{
+    unsigned int i, ci = 0;
+    for (i = 0; i < MLKEM_N; i += 16, ci += 8) {
+        basemul_acc_cached(r + i +  0, a + i +  0, b + i +  0, cache[ci+0]);
+        basemul_acc_cached(r + i +  2, a + i +  2, b + i +  2, cache[ci+1]);
+        basemul_acc_cached(r + i +  4, a + i +  4, b + i +  4, cache[ci+2]);
+        basemul_acc_cached(r + i +  6, a + i +  6, b + i +  6, cache[ci+3]);
+        basemul_acc_cached(r + i +  8, a + i +  8, b + i +  8, cache[ci+4]);
+        basemul_acc_cached(r + i + 10, a + i + 10, b + i + 10, cache[ci+5]);
+        basemul_acc_cached(r + i + 12, a + i + 12, b + i + 12, cache[ci+6]);
+        basemul_acc_cached(r + i + 14, a + i + 14, b + i + 14, cache[ci+7]);
+    }
+}
+#endif // SPEED_CODE
 
 
 

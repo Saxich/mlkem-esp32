@@ -14,6 +14,16 @@ typedef struct{
 // only for speed
 #ifdef SPEED_CODE
 
+    typedef struct {
+        poly_mulcache vec[MLKEM_K];
+    } polyvec_mulcache;
+
+    #define polyvec_mulcache_compute MLKEM_NAMESPACE(polyvec_mulcache_compute)
+    void polyvec_mulcache_compute(polyvec_mulcache *x, const polyvec *a);
+
+    #define polyvec_basemul_acc_montgomery_cached MLKEM_NAMESPACE(polyvec_basemul_acc_montgomery_cached)
+    void polyvec_basemul_acc_montgomery_cached(poly *r, const polyvec *a, const polyvec *b, const polyvec_mulcache *b_cache);
+
     #define polyvec_compress MLKEM_NAMESPACE(polyvec_compress)
     void polyvec_compress(uint8_t r[MLKEM_POLYVECCOMPRESSEDBYTES], const polyvec *a);
     #define cmp_polyvec_compress MLKEM_NAMESPACE(cmp_polyvec_compress)

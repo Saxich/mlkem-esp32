@@ -320,6 +320,26 @@ void polyvec_basemul_acc_montgomery(poly *r, const polyvec *a, const polyvec *b)
   polyvec_basemul_acc_montgomery_inside(r->coeffs, a->vec->coeffs, b->vec->coeffs, MLKEM_K);
 }
 
+void polyvec_mulcache_compute(polyvec_mulcache *x, const polyvec *a)
+{
+    unsigned int i;
+    for (i = 0; i < MLKEM_K; i++)
+        poly_mulcache_compute(&x->vec[i], &a->vec[i]);
+}
+
+static void polyvec_basemul_acc_montgomery_cached_inside(int16_t *r, const int16_t *a, const int16_t *b, const int16_t *cache)
+{
+    unsigned int i;
+    poly_basemul_montgomery_cached(r, a, b, cache);
+    for (i = 1; i < MLKEM_K; i++)
+        poly_basemul_acc_montgomery_cached(r, a + i*MLKEM_N, b + i*MLKEM_N, cache + i*(MLKEM_N/2));
+}
+
+void polyvec_basemul_acc_montgomery_cached(poly *r, const polyvec *a, const polyvec *b, const polyvec_mulcache *b_cache)
+{
+    polyvec_basemul_acc_montgomery_cached_inside(r->coeffs, a->vec->coeffs, b->vec->coeffs, b_cache->vec[0].coeffs);
+}
+
 
 /*************************************************
 * Name:        polyvec_reduce
