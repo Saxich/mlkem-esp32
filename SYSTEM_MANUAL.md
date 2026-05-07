@@ -125,7 +125,7 @@ If you are using the repository without modifications, set `TEST_TO_TURN` to one
 
 ## 5. Set Compiler Optimization Level
 
-By default, ESP-IDF uses the **Debug** optimization level (`-Og`), which produces slower code. For accurate benchmarks, switch to `-O2`:
+By default, ESP-IDF uses the **Debug** optimization level (`-Og`), which produces slower code. For accurate benchmarks, switch to `-Os`:
 
 ```bash
 idf.py menuconfig
@@ -134,12 +134,12 @@ idf.py menuconfig
 Navigate to:
 
 ```
-Component config → Compiler options → Optimization Level → Optimize for performance (-O2)
+Component config → Compiler options → Optimization Level → Optimize for size (-Os)
 ```
 
 Save and exit (`S` → `Q`).
 
-> **Note:** Always use `-O2` when running performance or memory benchmarks. Debug builds will report significantly worse cycle counts.
+> **Note:** Always use `-Os` when running performance or memory benchmarks. `-Os` has been verified as the fastest option on ESP32 for this codebase — it produces tighter code that fits better in the instruction cache than `-O2`.
 
 This applies to both the main project and any comparison implementations. For installation instructions of each comparison implementation, see the README in its respective subdirectory under [comparison/](comparison/).
 
