@@ -55,16 +55,16 @@ idf.py set-target esp32
 idf.py menuconfig
 ```
 
-**Optimization level** *(TODO: decide which)*
+**Optimization level**
 
 ```
 Component config
   → Compiler options
     → Optimization Level
-      → (●) Optimize for performance (-O2)
+      → (●) Optimize for size (-Os)
 ```
 
-> Default is "Debug" (`-Og`). You may switch to `-O2`, but results at `-Og` are still valid benchmarks.
+> Default is "Debug" (`-Og`). Always use `-Os` for benchmarks — it has been verified as the fastest option on ESP32 for this codebase.
 
 **CPU frequency** *(optional)*
 
