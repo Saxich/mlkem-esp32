@@ -152,6 +152,10 @@ Input buffers are not included in measurements. Heap is non-zero only for DUALCO
 | STACK_XTREME     | Decaps    | 2 064  | 0     | 2 064  |
 
 
+## Experiments
+
+Complete measurement data for all benchmarked and implemented variants is available in [results/](results/). See [results/README.md](results/README.md) for a description of each subdirectory.
+
 ## Comparison
 
 The [comparison/](comparison/) directory contains separate ESP-IDF projects for benchmarking other cryptographic libraries against this implementation.

@@ -1,0 +1,212 @@
+========================================
+ CONFIG INFO
+========================================
+CPU Frequency: 240000000 Hz (240.000 MHz)
+Algorithm: ML-KEM 512
+========================================
+
+Starting Timing Analysis Test...
+***START OF ESP32 PROGRAM***
+
+=== TIMING ANALYSIS TEST ===
+Iterations per operation: 100
+Warmup iterations: 20
+
+Warmup complete.
+
+  [1/3] Keypair profiling...
+        Keypair profiling complete.
+  [2/3] Encapsulation profiling...
+        Encapsulation profiling complete.
+  [3/3] Decapsulation profiling...
+        Decapsulation profiling complete.
+
+
+================================================================================
+                          TIMING ANALYSIS REPORT
+================================================================================
+
+CPU_FREQUENCY: 240 MHz
+
+--------------------------------------------------------------------------------
+                           OPERATION SUMMARIES
+--------------------------------------------------------------------------------
+
+OPERATION: keypair
+  Iterations: 100
+  Total cycles of operation:         121182718 (504.93 ms total, 5.05 ms avg)
+  Table cycles for operation:        118390600
+  Overhead produced by test: 2792118 ->  2.36%
+  Cycles measured in functions:      108784136 
+  Coverage:                            91.89%
+
+OPERATION: enc
+  Iterations: 100
+  Total cycles of operation:         148707464 (619.61 ms total, 6.20 ms avg)
+  Table cycles for operation:        145250300
+  Overhead produced by test: 3457164 ->  2.38%
+  Cycles measured in functions:      137270229
+  Coverage:                            94.51% 
+
+OPERATION: dec
+  Iterations: 100
+  Total cycles of operation:         183114975 (762.98 ms total, 7.63 ms avg)
+  Table cycles for operation:        179263600
+  Overhead produced by test: 3851375 ->  2.15% 
+  Cycles measured in functions:      166710294
+  Coverage:                            93.00%
+
+--------------------------------------------------------------------------------
+                      INDEPENDENT LEAF FUNCTIONS ANALYSIS
+--------------------------------------------------------------------------------
+The percentage is based on the number of cycles in benchmark
+Format: calls (calls/op) | total_cycles (ms) | %time | avg_cycles (us)
+
+================================ NTT OPERATIONS ================================
+
+[ntt]
+  keypair :    400 calls (  4.0/op) |   21977514 cyc ( 91.57 ms) |  18.6% | avg=  54943 cyc (228.93 us)
+  enc     :    200 calls (  2.0/op) |   11082659 cyc ( 46.18 ms) |   7.6% | avg=  55413 cyc (230.89 us)
+  dec     :    400 calls (  4.0/op) |   21885956 cyc ( 91.19 ms) |  12.2% | avg=  54714 cyc (227.97 us)
+
+[invntt]
+  enc     :    300 calls (  3.0/op) |   29030280 cyc (120.96 ms) |  20.0% | avg=  96767 cyc (403.20 us)
+  dec     :    400 calls (  4.0/op) |   38708369 cyc (161.28 ms) |  21.6% | avg=  96770 cyc (403.21 us)
+
+[basemul]
+  keypair :  51200 calls (512.0/op) |   10448786 cyc ( 43.54 ms) |   8.8% | avg=    204 cyc (  0.85 us)
+  enc     :  76800 calls (768.0/op) |   15676419 cyc ( 65.32 ms) |  10.8% | avg=    204 cyc (  0.85 us)
+  dec     : 102400 calls (1024.0/op) |   20900521 cyc ( 87.09 ms) |  11.7% | avg=    204 cyc (  0.85 us)
+
+============================= SAMPLING OPERATIONS ==============================
+
+[cbd2]
+  enc     :    300 calls (  3.0/op) |    1752473 cyc (  7.30 ms) |   1.2% | avg=   5841 cyc ( 24.34 us)
+  dec     :    300 calls (  3.0/op) |    1751187 cyc (  7.30 ms) |   1.0% | avg=   5837 cyc ( 24.32 us)
+
+[cbd3]
+  keypair :    400 calls (  4.0/op) |    3001373 cyc ( 12.51 ms) |   2.5% | avg=   7503 cyc ( 31.26 us)
+  enc     :    200 calls (  2.0/op) |    1499400 cyc (  6.25 ms) |   1.0% | avg=   7497 cyc ( 31.24 us)
+  dec     :    200 calls (  2.0/op) |    1499400 cyc (  6.25 ms) |   0.8% | avg=   7497 cyc ( 31.24 us)
+
+[gen_matrix]
+  keypair :    100 calls (  1.0/op) |   32652166 cyc (136.05 ms) |  27.6% | avg= 326521 cyc (1360.50 us)
+  enc     :    100 calls (  1.0/op) |   32620244 cyc (135.92 ms) |  22.5% | avg= 326202 cyc (1359.18 us)
+  dec     :    100 calls (  1.0/op) |   32618468 cyc (135.91 ms) |  18.2% | avg= 326184 cyc (1359.10 us)
+
+============================== HASH OPERATIONS =================================
+
+[sha3_256]
+  keypair :    100 calls (  1.0/op) |   15287519 cyc ( 63.70 ms) |  12.9% | avg= 152875 cyc (636.98 us)
+  enc     :    200 calls (  2.0/op) |   17490299 cyc ( 72.88 ms) |  12.0% | avg=  87451 cyc (364.38 us)
+
+[sha3_512]
+  keypair :    100 calls (  1.0/op) |    2290901 cyc (  9.55 ms) |   1.9% | avg=  22909 cyc ( 95.45 us)
+  enc     :    100 calls (  1.0/op) |    2384010 cyc (  9.93 ms) |   1.6% | avg=  23840 cyc ( 99.33 us)
+  dec     :    100 calls (  1.0/op) |    2675336 cyc ( 11.15 ms) |   1.5% | avg=  26753 cyc (111.47 us)
+
+[shake128_finalize - redundatant]
+
+[shake256_finalize - redundatant]
+
+[shake256 - excluded]
+
+============================== SYMETRIC OPERATIONS =================================
+
+[shake128_squeezeblocks - excluded -  tvori ~ 90%% gen_matrix]
+
+[shake128_absorb]
+  keypair :    400 calls (  4.0/op) |     562800 cyc (  2.35 ms) |   0.5% | avg=   1407 cyc (  5.86 us)
+  enc     :    400 calls (  4.0/op) |     564194 cyc (  2.35 ms) |   0.4% | avg=   1410 cyc (  5.88 us)
+  dec     :    400 calls (  4.0/op) |     562800 cyc (  2.35 ms) |   0.3% | avg=   1407 cyc (  5.86 us)
+
+[shake256_prf]
+  keypair :    400 calls (  4.0/op) |   18612190 cyc ( 77.55 ms) |  15.7% | avg=  46530 cyc (193.88 us)
+  enc     :    500 calls (  5.0/op) |   16878865 cyc ( 70.33 ms) |  11.6% | avg=  33757 cyc (140.65 us)
+  dec     :    500 calls (  5.0/op) |   16878809 cyc ( 70.33 ms) |   9.4% | avg=  33757 cyc (140.65 us)
+
+[shake256_rkprf]
+  dec     :    100 calls (  1.0/op) |   15401802 cyc ( 64.17 ms) |   8.6% | avg= 154018 cyc (641.74 us)
+
+===================== SERIALIZATION/COMPRESSION ============================
+
+[poly_compress]
+  enc     :    100 calls (  1.0/op) |    1067768 cyc (  4.45 ms) |   0.7% | avg=  10677 cyc ( 44.49 us)
+  dec     :    100 calls (  1.0/op) |    1066500 cyc (  4.44 ms) |   0.6% | avg=  10665 cyc ( 44.44 us)
+
+[poly_decompress]
+  dec     :    100 calls (  1.0/op) |     423300 cyc (  1.76 ms) |   0.2% | avg=   4233 cyc ( 17.64 us)
+
+[poly_tobytes]
+  keypair :    400 calls (  4.0/op) |    2411287 cyc ( 10.05 ms) |   2.0% | avg=   6028 cyc ( 25.12 us)
+
+[poly_frombytes]
+  enc     :    200 calls (  2.0/op) |     744200 cyc (  3.10 ms) |   0.5% | avg=   3721 cyc ( 15.50 us)
+  dec     :    400 calls (  4.0/op) |    1489709 cyc (  6.21 ms) |   0.8% | avg=   3724 cyc ( 15.52 us)
+
+[poly_tomsg]
+  dec     :    100 calls (  1.0/op) |     922500 cyc (  3.84 ms) |   0.5% | avg=   9225 cyc ( 38.44 us)
+
+[poly_frommsg]
+  enc     :    100 calls (  1.0/op) |    1079300 cyc (  4.50 ms) |   0.7% | avg=  10793 cyc ( 44.97 us)
+  dec     :    100 calls (  1.0/op) |    1079300 cyc (  4.50 ms) |   0.6% | avg=  10793 cyc ( 44.97 us)
+
+[polyvec_compress]
+  enc     :    100 calls (  1.0/op) |    2703301 cyc ( 11.26 ms) |   1.9% | avg=  27033 cyc (112.64 us)
+  dec     :    100 calls (  1.0/op) |    2705837 cyc ( 11.27 ms) |   1.5% | avg=  27058 cyc (112.74 us)
+
+[polyvec_decompress]
+  dec     :    100 calls (  1.0/op) |    1628100 cyc (  6.78 ms) |   0.9% | avg=  16281 cyc ( 67.84 us)
+
+========================== ARITHMETIC OPERATIONS ============================
+
+[poly_add]
+  keypair :    400 calls (  4.0/op) |    1539600 cyc (  6.41 ms) |   1.3% | avg=   3849 cyc ( 16.04 us)
+  enc     :    700 calls (  7.0/op) |    2696817 cyc ( 11.24 ms) |   1.9% | avg=   3852 cyc ( 16.05 us)
+  dec     :    800 calls (  8.0/op) |    3079200 cyc ( 12.83 ms) |   1.7% | avg=   3849 cyc ( 16.04 us)
+
+[poly_sub]
+  dec     :    100 calls (  1.0/op) |     384900 cyc (  1.60 ms) |   0.2% | avg=   3849 cyc ( 16.04 us)
+
+======================== CONSTANT-TIME OPERATIONS ==============================
+
+[verify]
+  dec     :    100 calls (  1.0/op) |     999300 cyc (  4.16 ms) |   0.6% | avg=   9993 cyc ( 41.64 us)
+
+[cmov]
+  dec     :    100 calls (  1.0/op) |      49000 cyc (  0.20 ms) |   0.0% | avg=    490 cyc (  2.04 us)
+
+--------------------------------------------------------------------------------
+                      SHARED LEAF FUNCTIONS ANALYSIS
+--------------------------------------------------------------------------------
+namerane na separatnom teste
+Format: calls (calls/op) | total_cycles (ms) | %time | avg_cycles (us)
+
+[barrett_reduce]
+  keypair : 204800 calls (2048.0/op) |    3785132 cyc ( 15.77 ms) |   3.2% | avg=     18 cyc (  0.08 us)
+  enc     : 473600 calls (4736.0/op) |    8625106 cyc ( 35.94 ms) |   5.9% | avg=     18 cyc (  0.08 us)
+  dec     : 665600 calls (6656.0/op) |   12085863 cyc ( 50.36 ms) |   6.7% | avg=     18 cyc (  0.08 us)
+
+[montgomery_reduce]
+  keypair : 665600 calls (6656.0/op) |    9991907 cyc ( 41.63 ms) |   8.4% | avg=     15 cyc (  0.06 us)
+  enc     : 908800 calls (9088.0/op) |   13646546 cyc ( 56.86 ms) |   9.4% | avg=     15 cyc (  0.06 us)
+  dec     : 1331200 calls (13312.0/op) |   19973332 cyc ( 83.22 ms) |  11.1% | avg=     15 cyc (  0.06 us)
+
+[keccakF1600]
+  keypair :   2701 calls ( 27.0/op) |   54644545 cyc (227.69 ms) |  46.2% | avg=  20231 cyc ( 84.30 us)
+  enc     :   2700 calls ( 27.0/op) |   54617133 cyc (227.57 ms) |  37.6% | avg=  20228 cyc ( 84.28 us)
+  dec     :   2600 calls ( 26.0/op) |   52535493 cyc (218.90 ms) |  29.3% | avg=  20205 cyc ( 84.19 us)
+
+[rej_uniform]
+  keypair :    401 calls (  4.0/op) |    3013583 cyc ( 12.56 ms) |   2.5% | avg=   7515 cyc ( 31.31 us)
+  enc     :    400 calls (  4.0/op) |    2984510 cyc ( 12.44 ms) |   2.1% | avg=   7461 cyc ( 31.09 us)
+  dec     :    400 calls (  4.0/op) |    2983200 cyc ( 12.43 ms) |   1.7% | avg=   7458 cyc ( 31.07 us)
+
+================================================================================
+                                END OF REPORT
+================================================================================
+
+[INTEGRITY CHECK: PASSED] Keys match.
+
+***END OF ESP32 PROGRAM***
+I (3302) main_task: Returned from app_main()

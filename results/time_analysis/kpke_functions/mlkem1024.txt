@@ -1,0 +1,188 @@
+=== TIMING ANALYSIS TEST ===
+Iterations per operation: 1000
+Warmup iterations: 10
+
+Warmup complete.
+
+  [1/3] Keypair profiling...
+        Keypair profiling complete.
+  [2/3] Encapsulation profiling...
+        Encapsulation profiling complete.
+  [3/3] Decapsulation profiling...
+        Decapsulation profiling complete.
+
+
+================================================================================
+                          TIMING ANALYSIS REPORT
+================================================================================
+
+Algorithmus: ML-KEM 1024
+CPU_FREQUENCY: 240 MHz
+
+--------------------------------------------------------------------------------
+                           OPERATION SUMMARIES
+--------------------------------------------------------------------------------
+
+OPERATION: keypair
+  Iterations:                        1000
+  Total cycles of operation:         2215875425 (9232.81 ms total, 9.23 ms avg)
+  Table cycles for operation:        2135678000
+  Overhead produced by test:         80197425 -> 3.76%
+  Cycles measured in functions:      1971569094
+  Coverage:                          92.32%
+
+OPERATION: enc
+  Iterations:                        1000
+  Total cycles of operation:         2391779620 (9965.75 ms total, 9.97 ms avg)
+  Table cycles for operation:        2292123000
+  Overhead produced by test:         99656620 -> 4.35%
+  Cycles measured in functions:      2125641436
+  Coverage:                          92.74%
+
+OPERATION: dec
+  Iterations:                        1000
+  Total cycles of operation:         2774418970 (11560.08 ms total, 11.56 ms avg)
+  Table cycles for operation:        2627935000
+  Overhead produced by test:         146483970 -> 5.57%
+  Cycles measured in functions:      2467207160
+  Coverage:                          93.88%
+
+--------------------------------------------------------------------------------
+                      INDCPA_KEYPAIR FUNCTIONS (in order)
+--------------------------------------------------------------------------------
+Format:            calls (calls/op) |    total_cycles (ms) | %time of all |  %time of measured | avg_cycles (us)
+
+[memcpy]
+  keypair :   1000 calls (  1.0/op) |      50000 cyc (  0.21 ms) |   0.0% |   0.0% | avg=     50 cyc (  0.21 us)
+
+[hash_g]
+  keypair :   1000 calls (  1.0/op) |   21699899 cyc ( 90.42 ms) |   1.0% |   1.1% | avg=  21699 cyc ( 90.41 us)
+
+[gen_a]
+  keypair :   1000 calls (  1.0/op) | 1121485896 cyc (4672.86 ms) |  52.5% |  56.9% | avg=1121485 cyc (4672.85 us)
+
+[poly_getnoise_eta1]
+  keypair :   8000 calls (  8.0/op) |  234604764 cyc (977.52 ms) |  11.0% |  11.9% | avg=  29325 cyc (122.19 us)
+
+[polyvec_ntt]
+  keypair :   2000 calls (  2.0/op) |  329120026 cyc (1371.33 ms) |  15.4% |  16.7% | avg= 164560 cyc (685.67 us)
+
+[polyvec_basemul_acc_montgomery]
+  keypair :   4000 calls (  4.0/op) |  138979232 cyc (579.08 ms) |   6.5% |   7.0% | avg=  34744 cyc (144.77 us)
+
+[poly_tomont]
+  keypair :   4000 calls (  4.0/op) |   31830328 cyc (132.63 ms) |   1.5% |   1.6% | avg=   7957 cyc ( 33.15 us)
+
+[polyvec_add]
+  keypair :   1000 calls (  1.0/op) |   15501261 cyc ( 64.59 ms) |   0.7% |   0.8% | avg=  15501 cyc ( 64.59 us)
+
+[polyvec_reduce]
+  keypair :   1000 calls (  1.0/op) |   28821888 cyc (120.09 ms) |   1.3% |   1.5% | avg=  28821 cyc (120.09 us)
+
+[pack_sk]
+  keypair :   1000 calls (  1.0/op) |   24238975 cyc (101.00 ms) |   1.1% |   1.2% | avg=  24238 cyc (100.99 us)
+
+[pack_pk]
+  keypair :   1000 calls (  1.0/op) |   25236825 cyc (105.15 ms) |   1.2% |   1.3% | avg=  25236 cyc (105.15 us)
+--------------------------------------------------------------------------------
+                      INDCPA_ENC FUNCTIONS (in order)
+--------------------------------------------------------------------------------
+Format:            calls (calls/op) |    total_cycles (ms) | %time of all |  %time of measured | avg_cycles (us)
+
+[unpack_pk]
+  enc     :   1000 calls (  1.0/op) |   19843704 cyc ( 82.68 ms) |   0.9% |   0.9% | avg=  19843 cyc ( 82.68 us)
+
+[poly_frommsg]
+  enc     :   1000 calls (  1.0/op) |   13906747 cyc ( 57.94 ms) |   0.6% |   0.7% | avg=  13906 cyc ( 57.94 us)
+
+[gen_at]
+  enc     :   1000 calls (  1.0/op) | 1123365728 cyc (4680.69 ms) |  49.0% |  52.8% | avg=1123365 cyc (4680.69 us)
+
+[poly_getnoise_eta1]
+  enc     :   4000 calls (  4.0/op) |  118222564 cyc (492.59 ms) |   5.2% |   5.6% | avg=  29555 cyc (123.15 us)
+
+[poly_getnoise_eta2]
+  enc     :   5000 calls (  5.0/op) |  145397167 cyc (605.82 ms) |   6.3% |   6.8% | avg=  29079 cyc (121.16 us)
+
+[polyvec_ntt]
+  enc     :   1000 calls (  1.0/op) |  165501061 cyc (689.59 ms) |   7.2% |   7.8% | avg= 165501 cyc (689.59 us)
+
+[polyvec_basemul_acc_montgomery]
+  enc     :   5000 calls (  5.0/op) |  173705997 cyc (723.78 ms) |   7.6% |   8.2% | avg=  34741 cyc (144.75 us)
+
+[polyvec_invntt_tomont]
+  enc     :   1000 calls (  1.0/op) |  197630632 cyc (823.46 ms) |   8.6% |   9.3% | avg= 197630 cyc (823.46 us)
+
+[poly_invntt_tomont]
+  enc     :   1000 calls (  1.0/op) |   48334943 cyc (201.40 ms) |   2.1% |   2.3% | avg=  48334 cyc (201.39 us)
+
+[polyvec_add]
+  enc     :   1000 calls (  1.0/op) |   15978629 cyc ( 66.58 ms) |   0.7% |   0.8% | avg=  15978 cyc ( 66.58 us)
+
+[poly_add]
+  enc     :   2000 calls (  2.0/op) |    7742156 cyc ( 32.26 ms) |   0.3% |   0.4% | avg=   3871 cyc ( 16.13 us)
+
+[polyvec_reduce]
+  enc     :   1000 calls (  1.0/op) |   28812613 cyc (120.05 ms) |   1.3% |   1.4% | avg=  28812 cyc (120.05 us)
+
+[poly_reduce]
+  enc     :   1000 calls (  1.0/op) |    7193869 cyc ( 29.97 ms) |   0.3% |   0.3% | avg=   7193 cyc ( 29.97 us)
+
+[pack_ciphertext]
+  enc     :   1000 calls (  1.0/op) |   60005626 cyc (250.02 ms) |   2.6% |   2.8% | avg=  60005 cyc (250.02 us)
+
+[polyvec_compress]
+  enc     :   1000 calls (  1.0/op) |   53346035 cyc (222.28 ms) |   2.3% |   2.5% | avg=  53346 cyc (222.28 us)
+
+[poly_compress]
+  enc     :   1000 calls (  1.0/op) |    6587923 cyc ( 27.45 ms) |   0.3% |   0.3% | avg=   6587 cyc ( 27.45 us)
+
+[polyvec_compress]
+  enc     :   1000 calls (  1.0/op) |   53346035 cyc (222.28 ms) |   2.3% |   2.5% | avg=  53346 cyc (222.28 us)
+
+[poly_compress]
+  enc     :   1000 calls (  1.0/op) |    6587923 cyc ( 27.45 ms) |   0.3% |   0.3% | avg=   6587 cyc ( 27.45 us)
+--------------------------------------------------------------------------------
+                      INDCPA_DEC FUNCTIONS (in order)
+--------------------------------------------------------------------------------
+Format:            calls (calls/op) |    total_cycles (ms) | %time of all |  %time of measured | avg_cycles (us)
+
+[unpack_ciphertext]
+  dec     :   1000 calls (  1.0/op) |   45149179 cyc (188.12 ms) |   1.7% |   1.8% | avg=  45149 cyc (188.12 us)
+
+[unpack_sk]
+  dec     :   1000 calls (  1.0/op) |   16914424 cyc ( 70.48 ms) |   0.6% |   0.7% | avg=  16914 cyc ( 70.47 us)
+
+[polyvec_ntt]
+  dec     :   2000 calls (  2.0/op) |  336699929 cyc (1402.92 ms) |  12.8% |  13.6% | avg= 168349 cyc (701.45 us)
+
+[polyvec_basemul_acc_montgomery]
+  dec     :   6000 calls (  6.0/op) |  208434201 cyc (868.48 ms) |   7.9% |   8.4% | avg=  34739 cyc (144.75 us)
+
+[poly_invntt_tomont]
+  dec     :   2000 calls (  2.0/op) |  101382748 cyc (422.43 ms) |   3.9% |   4.1% | avg=  50691 cyc (211.21 us)
+
+[poly_sub]
+  dec     :   1000 calls (  1.0/op) |    4808323 cyc ( 20.03 ms) |   0.2% |   0.2% | avg=   4808 cyc ( 20.03 us)
+
+[poly_reduce]
+  dec     :   2000 calls (  2.0/op) |   14388335 cyc ( 59.95 ms) |   0.5% |   0.6% | avg=   7194 cyc ( 29.98 us)
+
+[poly_tomsg]
+  dec     :   1000 calls (  1.0/op) |    5690618 cyc ( 23.71 ms) |   0.2% |   0.2% | avg=   5690 cyc ( 23.71 us)
+
+[polyvec_decompress]
+  dec     :   1000 calls (  1.0/op) |   39197521 cyc (163.32 ms) |   1.5% |   1.6% | avg=  39197 cyc (163.32 us)
+
+[poly_decompress]
+  dec     :   1000 calls (  1.0/op) |    5888198 cyc ( 24.53 ms) |   0.2% |   0.2% | avg=   5888 cyc ( 24.53 us)
+
+[polyvec_decompress]
+  dec     :   1000 calls (  1.0/op) |   39197521 cyc (163.32 ms) |   1.5% |   1.6% | avg=  39197 cyc (163.32 us)
+
+[poly_decompress]
+  dec     :   1000 calls (  1.0/op) |    5888198 cyc ( 24.53 ms) |   0.2% |   0.2% | avg=   5888 cyc ( 24.53 us)
+--------------------------------------------------------------------------------
+                      INTEGRITY CHECK
+--------------------------------------------------------------------------------
+[INTEGRITY CHECK: PASSED] Keys match.
