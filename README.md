@@ -156,6 +156,8 @@ Input buffers are not included in measurements. Heap is non-zero only for DUALCO
 
 Complete measurement data for all benchmarked and implemented variants is available in [results/](results/). See [results/README.md](results/README.md) for a description of each subdirectory.
 
+> **Timing analysis** (per-function cycle counts used to determine the dual-core task split) is on the [`time-analysis`](../../tree/time-analysis) branch.
+
 ## Comparison
 
 The [comparison/](comparison/) directory contains separate ESP-IDF projects for benchmarking other cryptographic libraries against this implementation.

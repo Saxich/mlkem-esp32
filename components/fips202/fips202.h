@@ -14,7 +14,6 @@
 
 // Include for KeccakP1600_plain32_state
 #include "KeccakP-1600-SnP.h"
-#include "params.h" 
 
 typedef struct {
   KeccakP1600_plain32_state s;  // Using interleaved format

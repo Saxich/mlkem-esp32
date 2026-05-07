@@ -69,10 +69,6 @@
     #define CRYPTO_ALGMODE "SPEED"
 #endif
 
-#if (TEST_TO_TURN == 2)
-    #define TIMEANALYSIS 1
-#endif // TEST_TO_TURN == 2
-
 #ifndef TEST_TO_TURN
     #define TEST_TO_TURN 1
 #endif

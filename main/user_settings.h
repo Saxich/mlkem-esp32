@@ -13,7 +13,6 @@
 
 
 // 1 = Benchmark task = speed+mem
-// 2 = Functions timing analysis
 // 3 = KATtest
 // 4 = KATtest + benchmark
 // 10 = Generate vectors

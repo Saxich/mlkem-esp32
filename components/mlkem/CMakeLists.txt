@@ -15,7 +15,6 @@ idf_component_register(
         "../../main"
     PRIV_REQUIRES
         bootloader_support
-        test_time
         fips202
         esp_rom
         mbedtls

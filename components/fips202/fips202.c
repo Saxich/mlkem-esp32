@@ -37,6 +37,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "params.h"
 #include "fips202.h"
 
 #define NROUNDS 24

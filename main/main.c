@@ -23,10 +23,6 @@
 #include "kat.h"
 // keccak
 #include "fips202.h"
-// time analysis
-#ifdef TIMEANALYSIS
-    #include "../test_time/timing.h"
-#endif
 
 
 #if MLKEM_K == 3
@@ -614,24 +610,6 @@ void kat_output_test(void *pvParameters) {
     vTaskDelete(NULL);
 }
 
-// timing
-void timing_analysis_test_wrapper(void *pvParameters){
-
-    #ifdef TIMEANALYSIS
-        configASSERT((uint32_t)pvParameters == 1);
-        printf("***START OF ESP32 PROGRAM***\n");
-        fflush(stdout);
-
-        timing_analysis_test();
-
-        printf("\n***END OF ESP32 PROGRAM***\n");
-    #endif 
-
-    fflush(stdout);
-    vTaskDelay(pdMS_TO_TICKS(100));
-
-    vTaskDelete(NULL);
-}
 
 
 void app_main(void)
@@ -645,21 +623,6 @@ void app_main(void)
 
         case 1:
             bechmark_suite();
-            break;
-        case 2:
-            printf("Starting Timing Analysis Test...\n");
-            xReturned = xTaskCreatePinnedToCore(
-                            timing_analysis_test_wrapper, 
-                            "TIMING_TEST", 
-                            90000,
-                            (void*)1, 
-                            MLKEM_TASK_PRIORITY,
-                            &xHandle, 
-                            MLKEM_MAIN_CORE);
-            
-            if (xReturned != pdPASS) {
-                printf("Timing analysis test task creation failed\n");
-            }        
             break;
         case 3:
             printf("Starting KAT test...\n");

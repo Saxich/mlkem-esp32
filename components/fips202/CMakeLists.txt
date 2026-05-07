@@ -5,7 +5,7 @@ idf_component_register(
     INCLUDE_DIRS
         "."
         "../../main" #user_settings.h
+        "../mlkem"  #params.h
     PRIV_REQUIRES
         bootloader_support
-        test_time  
 )
