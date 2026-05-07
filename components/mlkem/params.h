@@ -5,7 +5,17 @@
 #include "user_settings.h"  // single point of truth, always first
 
 #ifndef MLKEM_K
-    #define MLKEM_K 3 
+    #define MLKEM_K 3
+#endif
+
+/* ===== TEST_TO_TURN == 2: force SPEED only ===== */
+#if (TEST_TO_TURN == 2)
+    #undef  STACK
+    #undef  STACK_XTREME
+    #undef  STACK_DUALCORE
+    #undef  SPEED_DUALCORE
+    #define SPEED
+    #pragma message("TEST_TO_TURN == 2: overriding to SPEED / SPEED_CODE")
 #endif
 
 /* ===== MUTUAL EXCLUSION GUARDS ===== */
@@ -69,12 +79,12 @@
     #define CRYPTO_ALGMODE "SPEED"
 #endif
 
-#if (TEST_TO_TURN == 2)
-    #define TIMEANALYSIS 1
-#endif // TEST_TO_TURN == 2
-
 #ifndef TEST_TO_TURN
     #define TEST_TO_TURN 1
+#endif
+
+#if (TEST_TO_TURN == 2)
+    #define TIMEANALYSIS 1
 #endif
 
 

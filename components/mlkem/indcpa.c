@@ -226,7 +226,118 @@ static void unpack_ciphertext(polyvec *b, poly *v, const uint8_t c[MLKEM_INDCPA_
 *              - uint8_t *sk: output secret key
 *              - const uint8_t *coins: input randomness (32 bytes)
 **************************************************/
-#if defined(SPEED_DUALCORE)
+#if defined(TIMEANALYSIS)
+int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
+                                   uint8_t sk[MLKEM_INDCPA_SECRETKEYBYTES],
+                                   const uint8_t coins[MLKEM_SYMBYTES])
+{
+  unsigned int i;
+  VAR_ALIGN uint8_t buf[2*MLKEM_SYMBYTES]; //ide do hash_g store64 a load64 
+  const uint8_t *publicseed = buf;
+  const uint8_t *noiseseed = buf+MLKEM_SYMBYTES;
+  unsigned int nonce = 0;
+  polyvec a[MLKEM_K], e, pkpv, skpv;
+
+  esp_cpu_cycle_count_t start, end;
+
+  // 1. memcpy
+  start = esp_cpu_get_cycle_count();
+  memcpy(buf, coins, MLKEM_SYMBYTES);
+  end = esp_cpu_get_cycle_count();
+  stats_memcpy.cumulative_cycles += (end - start);
+  stats_memcpy.call_count++;
+
+  buf[MLKEM_SYMBYTES] = MLKEM_K;
+  
+  // 2. hash_g
+  start = esp_cpu_get_cycle_count();
+  hash_g(buf, buf, MLKEM_SYMBYTES+1);
+  end = esp_cpu_get_cycle_count();
+  stats_hash_g.cumulative_cycles += (end - start);
+  stats_hash_g.call_count++;
+
+  // 3. gen_a
+  start = esp_cpu_get_cycle_count();
+  gen_a_elements(a, publicseed, SC_MATRX_STRT_EL, SC_MATRX_END_EL);
+  end = esp_cpu_get_cycle_count();
+  stats_gen_a.cumulative_cycles += (end - start);
+  stats_gen_a.call_count++;
+
+  // 4. poly_getnoise_eta1  (skpv)
+  start = esp_cpu_get_cycle_count();
+  for(i=0;i<MLKEM_K;i++)
+    poly_getnoise_eta1(&skpv.vec[i], noiseseed, nonce++);
+  for(i=0;i<MLKEM_K;i++)
+    poly_getnoise_eta1(&e.vec[i], noiseseed, nonce++);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_getnoise_eta1.cumulative_cycles += (end - start);
+  stats_poly_getnoise_eta1.call_count++;
+
+  // 5. polyvec_ntt  (skpv)
+  start = esp_cpu_get_cycle_count();
+  polyvec_ntt(&skpv);
+  polyvec_ntt(&e);
+  end = esp_cpu_get_cycle_count();
+  stats_ntt.cumulative_cycles += (end - start);
+  stats_ntt.call_count++;
+
+  // 6. polyvec_basemul_acc_montgomery  +  7. poly_tomont
+  for(i=0;i<MLKEM_K;i++) {
+    start = esp_cpu_get_cycle_count();
+    polyvec_basemul_acc_montgomery(&pkpv.vec[i], &a[i], &skpv);
+    end = esp_cpu_get_cycle_count();
+    stats_basemul.cumulative_cycles += (end - start);
+    stats_basemul.call_count++;
+
+    start = esp_cpu_get_cycle_count();
+    poly_tomont(&pkpv.vec[i]);
+    end = esp_cpu_get_cycle_count();
+    stats_poly_tomont.cumulative_cycles += (end - start);
+    stats_poly_tomont.call_count++;
+  }
+
+  // 8. polyvec_add
+  start = esp_cpu_get_cycle_count();
+  polyvec_add(&pkpv, &pkpv, &e);
+  end = esp_cpu_get_cycle_count();
+  stats_polyvec_add.cumulative_cycles += (end - start);
+  stats_polyvec_add.call_count++;
+
+  // 9. polyvec_reduce
+  start = esp_cpu_get_cycle_count();
+  polyvec_reduce(&pkpv);
+  end = esp_cpu_get_cycle_count();
+  stats_polyvec_reduce.cumulative_cycles += (end - start);
+  stats_polyvec_reduce.call_count++;
+
+  // 10. pack_sk
+  start = esp_cpu_get_cycle_count();
+  pack_sk(sk, &skpv);
+  end = esp_cpu_get_cycle_count();
+  stats_pack_sk.cumulative_cycles += (end - start);
+  stats_pack_sk.call_count++;
+
+  // 11. pack_pk
+  start = esp_cpu_get_cycle_count();
+  pack_pk(pk, &pkpv, publicseed);
+  end = esp_cpu_get_cycle_count();
+  stats_pack_pk.cumulative_cycles += (end - start);
+  stats_pack_pk.call_count++;
+
+
+  // Nicenie medzivysledkov podla FIP203 Section 3.3
+  buffer_zeroize(buf,   sizeof(buf));
+  buffer_zeroize(&skpv, sizeof(skpv));
+  buffer_zeroize(&e,    sizeof(e));
+  buffer_zeroize(&a,    sizeof(a));
+  buffer_zeroize(&pkpv, sizeof(pkpv));
+  buffer_zeroize(&nonce, sizeof(nonce));
+
+  return 0;
+}
+
+
+#elif defined(SPEED_DUALCORE)
 
 typedef struct IndcpaKeypairData_t {
   uint8_t * pk;
@@ -850,7 +961,178 @@ int indcpa_keypair(uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
 *                                      (of length MLKEM_SYMBYTES) to deterministically
 *                                      generate all randomness
 **************************************************/
-#if defined(SPEED_DUALCORE)
+#if defined(TIMEANALYSIS)
+int indcpa_enc( uint8_t c[MLKEM_INDCPA_BYTES],
+                const uint8_t m[MLKEM_INDCPA_MSGBYTES],
+                const uint8_t pk[MLKEM_INDCPA_PUBLICKEYBYTES],
+                const uint8_t coins[MLKEM_SYMBYTES],
+                unsigned int *cmp_out)
+{
+  volatile uint64_t rc = 0;
+  unsigned int i;
+  VAR_ALIGN uint8_t seed[MLKEM_SYMBYTES];
+  uint8_t nonce = 0;
+  polyvec sp, pkpv, ep, at[MLKEM_K], b;
+  poly v, k, epp; 
+
+  esp_cpu_cycle_count_t start, end;
+
+
+  /*
+  Preklad
+  sp == r
+  ep = e1
+  epp == e2
+  pkpv == t
+  */
+  // 1. unpack_pk
+  start = esp_cpu_get_cycle_count();
+  unpack_pk(&pkpv, seed, pk);
+  end = esp_cpu_get_cycle_count();
+  stats_unpack_pk.cumulative_cycles += (end - start);
+  stats_unpack_pk.call_count++;
+
+  // 2. gen_at
+  start = esp_cpu_get_cycle_count();
+  gen_at_elements(at, seed, SC_MATRX_STRT_EL, SC_MATRX_END_EL);
+  end = esp_cpu_get_cycle_count();
+  stats_gen_at.cumulative_cycles += (end - start);
+  stats_gen_at.call_count++;
+
+  // 3. poly_frommsg
+  start = esp_cpu_get_cycle_count();
+  poly_frommsg(&k, m);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_frommsg.cumulative_cycles += (end - start);
+  stats_poly_frommsg.call_count++;
+
+  // 4. poly_getnoise_eta1  (sp)
+  for(i=0;i<MLKEM_K;i++){
+    start = esp_cpu_get_cycle_count();
+    poly_getnoise_eta1(sp.vec+i, coins, nonce++);
+    end = esp_cpu_get_cycle_count();
+    stats_poly_getnoise_eta1.cumulative_cycles += (end - start);
+    stats_poly_getnoise_eta1.call_count++;
+  }
+  // 5. poly_getnoise_eta2  (ep)
+  for(i=0;i<MLKEM_K;i++){
+    start = esp_cpu_get_cycle_count();
+    poly_getnoise_eta2(ep.vec+i, coins, nonce++);
+    end = esp_cpu_get_cycle_count();
+    stats_poly_getnoise_eta2.cumulative_cycles += (end - start);
+    stats_poly_getnoise_eta2.call_count++;
+  }
+  // 5. poly_getnoise_eta2  (epp)
+  start = esp_cpu_get_cycle_count();
+  poly_getnoise_eta2(&epp, coins, nonce++);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_getnoise_eta2.cumulative_cycles += (end - start);
+  stats_poly_getnoise_eta2.call_count++;
+
+  // 6. polyvec_ntt  (sp)
+  start = esp_cpu_get_cycle_count();
+  polyvec_ntt(&sp);
+  end = esp_cpu_get_cycle_count();
+  stats_ntt.cumulative_cycles += (end - start);
+  stats_ntt.call_count++;
+
+  // 7. polyvec_basemul_acc_montgomery  (b)
+  for(i=0;i<MLKEM_K;i++){
+    start = esp_cpu_get_cycle_count();
+    polyvec_basemul_acc_montgomery(&b.vec[i], &at[i], &sp);
+    end = esp_cpu_get_cycle_count();
+    stats_basemul.cumulative_cycles += (end - start);
+    stats_basemul.call_count++;
+  }
+  // 7. polyvec_basemul_acc_montgomery  (v)
+  start = esp_cpu_get_cycle_count();
+  polyvec_basemul_acc_montgomery(&v, &pkpv, &sp);
+  end = esp_cpu_get_cycle_count();
+  stats_basemul.cumulative_cycles += (end - start);
+  stats_basemul.call_count++;
+
+  // 8. polyvec_invntt_tomont
+  start = esp_cpu_get_cycle_count();
+  polyvec_invntt_tomont(&b);
+  end = esp_cpu_get_cycle_count();
+  stats_invntt.cumulative_cycles += (end - start);
+  stats_invntt.call_count++;
+  
+  // 9. poly_invntt_tomont
+  start = esp_cpu_get_cycle_count();
+  poly_invntt_tomont(&v);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_invntt.cumulative_cycles += (end - start);
+  stats_poly_invntt.call_count++;
+
+  // 10. polyvec_add
+  start = esp_cpu_get_cycle_count();
+  polyvec_add(&b, &b, &ep);
+  end = esp_cpu_get_cycle_count();
+  stats_polyvec_add.cumulative_cycles += (end - start);
+  stats_polyvec_add.call_count++;
+
+  // 11. poly_add  (v + epp)
+  start = esp_cpu_get_cycle_count();
+  poly_add(&v, &v, &epp);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_add.cumulative_cycles += (end - start);
+  stats_poly_add.call_count++;
+
+  // 11. poly_add  (v + k)
+  start = esp_cpu_get_cycle_count();
+  poly_add(&v, &v, &k);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_add.cumulative_cycles += (end - start);
+  stats_poly_add.call_count++;
+
+  // 12. polyvec_reduce
+  start = esp_cpu_get_cycle_count();
+  polyvec_reduce(&b);
+  end = esp_cpu_get_cycle_count();
+  stats_polyvec_reduce.cumulative_cycles += (end - start);
+  stats_polyvec_reduce.call_count++;
+
+  // 13. poly_reduce
+  start = esp_cpu_get_cycle_count();
+  poly_reduce(&v);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_reduce.cumulative_cycles += (end - start);
+  stats_poly_reduce.call_count++;
+
+  // 14. pack_ciphertext
+  start = esp_cpu_get_cycle_count();
+  //compress, encode
+  if (cmp_out != ENC_ONLY){
+    cmp_pack_ciphertext(&rc, c, &b, &v);
+    rc = ~rc + 1;
+    rc >>= 63;
+    *cmp_out  = (unsigned int)rc;   // 0 = match, 1 = mismatch
+  }
+  else {
+    pack_ciphertext(c, &b, &v);
+  }
+  end = esp_cpu_get_cycle_count();
+  stats_pack_ciphertext.cumulative_cycles += (end - start);
+  stats_pack_ciphertext.call_count++;
+
+  // Nicenie medzivysledkov podla FIP203 Section 3.3
+  buffer_zeroize(&sp,   sizeof(sp));
+  buffer_zeroize(&ep,   sizeof(ep));
+  buffer_zeroize(&epp,  sizeof(epp));
+  buffer_zeroize(&k,    sizeof(k));
+  buffer_zeroize(&pkpv, sizeof(pkpv));
+  buffer_zeroize(&at,   sizeof(at));
+  buffer_zeroize(&b,    sizeof(b));
+  buffer_zeroize(&v,    sizeof(v));
+  buffer_zeroize(seed,  sizeof(seed));
+
+
+  return 0;
+}
+
+
+#elif defined(SPEED_DUALCORE)
 typedef struct IndcpaEncData_t
 {
   uint8_t * c;
@@ -1716,7 +1998,83 @@ int indcpa_enc( uint8_t c[MLKEM_INDCPA_BYTES],
 *              - const uint8_t *sk: pointer to input secret key
 *                                   (of length MLKEM_INDCPA_SECRETKEYBYTES)
 **************************************************/
-#if defined(SPEED_DUALCORE)
+#if defined(TIMEANALYSIS)
+int indcpa_dec(uint8_t m[MLKEM_INDCPA_MSGBYTES],
+                const uint8_t c[MLKEM_INDCPA_BYTES],
+                const uint8_t sk[MLKEM_INDCPA_SECRETKEYBYTES])
+{
+  polyvec b, skpv;
+  poly v, mp;
+
+  esp_cpu_cycle_count_t start, end;
+
+  // 1. unpack_ciphertext
+  start = esp_cpu_get_cycle_count();
+  unpack_ciphertext(&b, &v, c);
+  end = esp_cpu_get_cycle_count();
+  stats_unpack_ciphertext.cumulative_cycles += (end - start);
+  stats_unpack_ciphertext.call_count++;
+
+  // 2. unpack_sk
+  start = esp_cpu_get_cycle_count();
+  unpack_sk(&skpv, sk);
+  end = esp_cpu_get_cycle_count();
+  stats_unpack_sk.cumulative_cycles += (end - start);
+  stats_unpack_sk.call_count++;
+
+  // 3. polyvec_ntt
+  start = esp_cpu_get_cycle_count();
+  polyvec_ntt(&b);
+  end = esp_cpu_get_cycle_count();
+  stats_ntt.cumulative_cycles += (end - start);
+  stats_ntt.call_count++;
+
+  // 4. polyvec_basemul_acc_montgomery
+  start = esp_cpu_get_cycle_count();
+  polyvec_basemul_acc_montgomery(&mp, &skpv, &b);
+  end = esp_cpu_get_cycle_count();
+  stats_basemul.cumulative_cycles += (end - start);
+  stats_basemul.call_count++;
+
+
+  // 5. poly_invntt_tomont
+  start = esp_cpu_get_cycle_count();
+  poly_invntt_tomont(&mp);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_invntt.cumulative_cycles += (end - start);
+  stats_poly_invntt.call_count++;
+
+
+  // 6. poly_sub
+  start = esp_cpu_get_cycle_count();
+  poly_sub(&mp, &v, &mp);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_sub.cumulative_cycles += (end - start);
+  stats_poly_sub.call_count++;
+
+  // 7. poly_reduce
+  start = esp_cpu_get_cycle_count();
+  poly_reduce(&mp);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_reduce.cumulative_cycles += (end - start);
+  stats_poly_reduce.call_count++;
+
+  // 8. poly_tomsg
+  start = esp_cpu_get_cycle_count();
+  poly_tomsg(m, &mp);
+  end = esp_cpu_get_cycle_count();
+  stats_poly_tomsg.cumulative_cycles += (end - start);
+  stats_poly_tomsg.call_count++;
+
+  // Nicenie medzivysledkov podla FIP203 Section 3.3
+  buffer_zeroize(&skpv, sizeof(skpv));
+  buffer_zeroize(&b,    sizeof(b));
+  buffer_zeroize(&v,    sizeof(v));
+  buffer_zeroize(&mp,   sizeof(mp));
+
+  return 0;
+}
+#elif defined(SPEED_DUALCORE)
 typedef struct IndcpaDecData_t
 {
   uint8_t * m;

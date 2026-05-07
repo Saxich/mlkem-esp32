@@ -1,1 +1,0 @@
-Folder containing a guide on how to install and benchmark other cryptographic libraries with ML-KEM on ESP32.

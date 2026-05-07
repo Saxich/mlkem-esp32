@@ -120,17 +120,17 @@ extern operation_profile_t profile_dec;
 static const uint64_t TOTAL_CYCLES_KEYGEN_TABLE[3] = {
     859112,   // K=2
     1379178,  // K=3
-    2135678   // K=4
+    1805875   // K=4
 };
 static const uint64_t TOTAL_CYCLES_ENC_TABLE[3] = {
     948155,   // K=2
     1522645,  // K=3
-    2292123   // K=4
+    1949085   // K=4
 };
 static const uint64_t TOTAL_CYCLES_DEC_TABLE[3] = {
     1150210,  // K=2
     1792363,  // K=3
-    2627935   // K=4
+    2167365   // K=4
 };
 
 static inline uint64_t get_reference_cycles(int operation_type) {
