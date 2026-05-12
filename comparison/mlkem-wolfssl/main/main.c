@@ -455,14 +455,8 @@ void bechmark_suite(void){
         uint32_t freq_hz = CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ * 1000000;
         printf("CPU Frequency: %lu Hz (%.3f MHz)\n", freq_hz, freq_hz / 1e6f);
         
-        #if USE_MLKEM_768 == 1
-            printf("Algorithm: ML-KEM 768\n");
-        #elif USE_MLKEM_1024 == 1
-            printf("Algorithm: ML-KEM 1024\n");
-        #else
-            printf("Algorithm: ML-KEM 512\n");
-        #endif
-
+        printf("Algorithm: ML-KEM %d\n", MLKEM_VERSION);
+        
         // ==== MEMORY ====
         printf("========================================\n");
         printf(" MEMORY BENCHMARK\n");
