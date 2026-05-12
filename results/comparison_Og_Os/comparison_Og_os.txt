@@ -1,0 +1,186 @@
+================================================================================
+ML-KEM Benchmark Comparison: -Os vs -Og Compiler Optimization
+================================================================================
+
+Source files (compiler flag taken from each file's header line):
+  -Os : benchmark_Os.txt
+  -Og : benchmark_Og.txt
+
+Run configuration:
+  CPU Frequency: 240.000 MHz
+  Iterations per measurement: 100
+  Integrity check: PASSED for every (mode, K) combination in both runs.
+
+Metrics compared:
+  1) Performance AVG  - 3rd value in "[Raw - min max avg stddev]" (CPU cycles)
+  2) Stackmax         - 1st value in "[Raw - stackmax heapmax]"   (bytes)
+
+Delta convention:
+  Δ%  =  (Og - Os) / Os  x  100
+  +Δ%  ->  -Og value is HIGHER than -Os (slower / more stack)
+  -Δ%  ->  -Og value is LOWER  than -Os (faster / less stack)
+
+================================================================================
+[1/2] PERFORMANCE  --  AVG CYCLES
+================================================================================
+
+Mode            | Algorithm   | Op      |    -Os avg    |    -Og avg    |   Δ%
+----------------|-------------|---------|---------------|---------------|---------
+SPEED           | ML-KEM-512  | Keypair |       771,380 |       909,150 | +17.86%
+SPEED           | ML-KEM-512  | Encap   |       834,899 |       970,531 | +16.25%
+SPEED           | ML-KEM-512  | Decap   |       937,470 |     1,101,859 | +17.53%
+SPEED           | ML-KEM-768  | Keypair |     1,189,502 |     1,417,499 | +19.17%
+SPEED           | ML-KEM-768  | Encap   |     1,311,871 |     1,534,599 | +16.98%
+SPEED           | ML-KEM-768  | Decap   |     1,462,381 |     1,720,229 | +17.63%
+SPEED           | ML-KEM-1024 | Keypair |     1,806,371 |     2,133,814 | +18.13%
+SPEED           | ML-KEM-1024 | Encap   |     1,959,854 |     2,269,206 | +15.78%
+SPEED           | ML-KEM-1024 | Decap   |     2,167,304 |     2,528,725 | +16.68%
+----------------|-------------|---------|---------------|---------------|---------
+SPEED_DUALCORE  | ML-KEM-512  | Keypair |       536,702 |       614,004 | +14.40%
+SPEED_DUALCORE  | ML-KEM-512  | Encap   |       554,509 |       628,427 | +13.33%
+SPEED_DUALCORE  | ML-KEM-512  | Decap   |       641,699 |       732,970 | +14.22%
+SPEED_DUALCORE  | ML-KEM-768  | Keypair |       788,307 |       922,922 | +17.08%
+SPEED_DUALCORE  | ML-KEM-768  | Encap   |       827,778 |       953,183 | +15.15%
+SPEED_DUALCORE  | ML-KEM-768  | Decap   |       956,881 |     1,105,674 | +15.55%
+SPEED_DUALCORE  | ML-KEM-1024 | Keypair |     1,101,156 |     1,284,014 | +16.61%
+SPEED_DUALCORE  | ML-KEM-1024 | Encap   |     1,174,681 |     1,340,629 | +14.13%
+SPEED_DUALCORE  | ML-KEM-1024 | Decap   |     1,328,948 |     1,513,470 | +13.88%
+----------------|-------------|---------|---------------|---------------|---------
+STACK_XTREME    | ML-KEM-512  | Keypair |     1,125,719 |     1,338,834 | +18.93%
+STACK_XTREME    | ML-KEM-512  | Encap   |     1,110,611 |     1,323,398 | +19.16%
+STACK_XTREME    | ML-KEM-512  | Decap   |     1,205,822 |     1,433,554 | +18.89%
+STACK_XTREME    | ML-KEM-768  | Keypair |     1,787,023 |     2,133,128 | +19.37%
+STACK_XTREME    | ML-KEM-768  | Encap   |     1,790,316 |     2,140,298 | +19.55%
+STACK_XTREME    | ML-KEM-768  | Decap   |     1,932,927 |     2,301,777 | +19.08%
+STACK_XTREME    | ML-KEM-1024 | Keypair |     2,817,451 |     3,355,206 | +19.09%
+STACK_XTREME    | ML-KEM-1024 | Encap   |     2,817,953 |     3,348,166 | +18.82%
+STACK_XTREME    | ML-KEM-1024 | Decap   |     2,996,982 |     3,571,710 | +19.18%
+----------------|-------------|---------|---------------|---------------|---------
+STACK           | ML-KEM-512  | Keypair |       858,009 |     1,015,089 | +18.31%
+STACK           | ML-KEM-512  | Encap   |       829,830 |       992,583 | +19.61%
+STACK           | ML-KEM-512  | Decap   |       928,791 |     1,105,238 | +19.00%
+STACK           | ML-KEM-768  | Keypair |     1,336,713 |     1,583,132 | +18.43%
+STACK           | ML-KEM-768  | Encap   |     1,322,120 |     1,579,220 | +19.45%
+STACK           | ML-KEM-768  | Decap   |     1,465,718 |     1,740,411 | +18.74%
+STACK           | ML-KEM-1024 | Keypair |     2,166,471 |     2,356,827 |  +8.79%
+STACK           | ML-KEM-1024 | Encap   |     2,139,321 |     2,337,539 |  +9.27%
+STACK           | ML-KEM-1024 | Decap   |     2,335,912 |     2,579,593 | +10.43%
+----------------|-------------|---------|---------------|---------------|---------
+STACK_DUALCORE  | ML-KEM-512  | Keypair |       570,287 |       707,983 | +24.14%
+STACK_DUALCORE  | ML-KEM-512  | Encap   |       582,569 |       726,892 | +24.77%
+STACK_DUALCORE  | ML-KEM-512  | Decap   |       650,231 |       834,683 | +28.37%
+STACK_DUALCORE  | ML-KEM-768  | Keypair |     1,017,443 |     1,210,612 | +18.99%
+STACK_DUALCORE  | ML-KEM-768  | Encap   |     1,036,705 |     1,249,972 | +20.57%
+STACK_DUALCORE  | ML-KEM-768  | Decap   |     1,146,527 |     1,437,378 | +25.37%
+STACK_DUALCORE  | ML-KEM-1024 | Keypair |     1,272,304 |     1,481,919 | +16.47%
+STACK_DUALCORE  | ML-KEM-1024 | Encap   |     1,628,891 |     1,901,598 | +16.74%
+STACK_DUALCORE  | ML-KEM-1024 | Decap   |     1,729,502 |     2,069,648 | +19.67%
+
+================================================================================
+[2/2] MEMORY  --  STACKMAX (bytes)
+================================================================================
+
+Mode            | Algorithm   | Op      | -Os stackmax  | -Og stackmax  |   Δ%
+----------------|-------------|---------|---------------|---------------|---------
+SPEED           | ML-KEM-512  | Keypair |         6,224 |         6,144 |  -1.29%
+SPEED           | ML-KEM-512  | Encap   |         8,832 |         8,768 |  -0.72%
+SPEED           | ML-KEM-512  | Decap   |         8,784 |         8,720 |  -0.73%
+SPEED           | ML-KEM-768  | Keypair |        10,336 |        10,432 |  +0.93%
+SPEED           | ML-KEM-768  | Encap   |        13,440 |        13,376 |  -0.48%
+SPEED           | ML-KEM-768  | Decap   |        13,392 |        13,328 |  -0.48%
+SPEED           | ML-KEM-1024 | Keypair |        15,632 |        15,552 |  -0.51%
+SPEED           | ML-KEM-1024 | Encap   |        19,072 |        19,008 |  -0.34%
+SPEED           | ML-KEM-1024 | Decap   |        19,024 |        18,960 |  -0.34%
+----------------|-------------|---------|---------------|---------------|---------
+SPEED_DUALCORE  | ML-KEM-512  | Keypair |         6,240 |         6,176 |  -1.03%
+SPEED_DUALCORE  | ML-KEM-512  | Encap   |         8,928 |         8,864 |  -0.72%
+SPEED_DUALCORE  | ML-KEM-512  | Decap   |         8,880 |         8,816 |  -0.72%
+SPEED_DUALCORE  | ML-KEM-768  | Keypair |        10,352 |        10,288 |  -0.62%
+SPEED_DUALCORE  | ML-KEM-768  | Encap   |        13,536 |        13,472 |  -0.47%
+SPEED_DUALCORE  | ML-KEM-768  | Decap   |        13,488 |        13,424 |  -0.47%
+SPEED_DUALCORE  | ML-KEM-1024 | Keypair |        15,472 |        15,392 |  -0.52%
+SPEED_DUALCORE  | ML-KEM-1024 | Encap   |        19,168 |        19,104 |  -0.33%
+SPEED_DUALCORE  | ML-KEM-1024 | Decap   |        19,120 |        19,056 |  -0.33%
+----------------|-------------|---------|---------------|---------------|---------
+STACK_XTREME    | ML-KEM-512  | Keypair |         1,856 |         1,984 |  +6.90%
+STACK_XTREME    | ML-KEM-512  | Encap   |         1,920 |         1,904 |  -0.83%
+STACK_XTREME    | ML-KEM-512  | Decap   |         1,872 |         1,856 |  -0.85%
+STACK_XTREME    | ML-KEM-768  | Keypair |         1,840 |         1,776 |  -3.48%
+STACK_XTREME    | ML-KEM-768  | Encap   |         1,904 |         1,968 |  +3.36%
+STACK_XTREME    | ML-KEM-768  | Decap   |         1,856 |         1,920 |  +3.45%
+STACK_XTREME    | ML-KEM-1024 | Keypair |         2,000 |         1,968 |  -1.60%
+STACK_XTREME    | ML-KEM-1024 | Encap   |         2,096 |         2,032 |  -3.05%
+STACK_XTREME    | ML-KEM-1024 | Decap   |         2,128 |         2,064 |  -3.01%
+----------------|-------------|---------|---------------|---------------|---------
+STACK           | ML-KEM-512  | Keypair |         2,544 |         2,320 |  -8.81%
+STACK           | ML-KEM-512  | Encap   |         2,384 |         2,352 |  -1.34%
+STACK           | ML-KEM-512  | Decap   |         2,336 |         2,304 |  -1.37%
+STACK           | ML-KEM-768  | Keypair |         2,864 |         2,896 |  +1.12%
+STACK           | ML-KEM-768  | Encap   |         2,896 |         2,848 |  -1.66%
+STACK           | ML-KEM-768  | Decap   |         2,848 |         2,800 |  -1.69%
+STACK           | ML-KEM-1024 | Keypair |         3,568 |         3,488 |  -2.24%
+STACK           | ML-KEM-1024 | Encap   |         3,600 |         3,552 |  -1.33%
+STACK           | ML-KEM-1024 | Decap   |         3,552 |         3,504 |  -1.35%
+----------------|-------------|---------|---------------|---------------|---------
+STACK_DUALCORE  | ML-KEM-512  | Keypair |         2,368 |         2,320 |  -2.03%
+STACK_DUALCORE  | ML-KEM-512  | Encap   |         2,448 |         2,416 |  -1.31%
+STACK_DUALCORE  | ML-KEM-512  | Decap   |         2,400 |         2,368 |  -1.33%
+STACK_DUALCORE  | ML-KEM-768  | Keypair |         2,880 |         2,816 |  -2.22%
+STACK_DUALCORE  | ML-KEM-768  | Encap   |         2,976 |         2,912 |  -2.15%
+STACK_DUALCORE  | ML-KEM-768  | Decap   |         2,928 |         2,864 |  -2.19%
+STACK_DUALCORE  | ML-KEM-1024 | Keypair |         3,408 |         3,328 |  -2.35%
+STACK_DUALCORE  | ML-KEM-1024 | Encap   |         3,488 |         3,424 |  -1.83%
+STACK_DUALCORE  | ML-KEM-1024 | Decap   |         3,440 |         3,376 |  -1.86%
+
+================================================================================
+SUMMARY
+================================================================================
+
+PERFORMANCE (avg cycles)
+------------------------
+  -Og is SLOWER than -Os in every single one of 45 measurements
+  (5 modes x 3 security levels x 3 operations).
+
+  Slowdown range : +8.79% .. +28.37%
+  Mean slowdown  : ~17.8%
+
+  Smallest gap   : STACK / ML-KEM-1024 / Keypair        ( +8.79% )
+  Largest gap    : STACK_DUALCORE / ML-KEM-512 / Decap  ( +28.37% )
+
+  Per-mode mean slowdown of -Og vs -Os:
+    SPEED            : +17.3%
+    SPEED_DUALCORE   : +14.9%
+    STACK_XTREME     : +19.1%
+    STACK            : +15.8%
+    STACK_DUALCORE   : +21.7%
+
+
+STACKMAX (peak stack, bytes)
+----------------------------
+  Differences are small in absolute and relative terms; the compiler
+  flag has only a marginal effect on stack-frame size.
+
+  In the SPEED and SPEED_DUALCORE modes -Og uses very slightly LESS
+  stack (typically -0.3% .. -1.3%). In STACK_XTREME the picture is
+  mixed (a few +3..+7% outliers). In STACK / STACK_DUALCORE -Og also
+  uses slightly less stack on average.
+
+  Largest single deviations:
+    -8.81%   STACK         / ML-KEM-512  / Keypair   (-Og uses less)
+    +6.90%   STACK_XTREME  / ML-KEM-512  / Keypair   (-Og uses more)
+
+  Otherwise all stackmax deltas are within +/- 3.5%.
+
+
+CONCLUSION
+----------
+  -Os is the clear winner for runtime on this ESP32 build: ~18% faster
+  on average across all configurations, with essentially equivalent
+  stack usage (within a few percent, mostly under 2%). For thesis-grade
+  performance numbers, -Os is the appropriate compiler flag; -Og should
+  only be used when debug-friendly code is needed.
+
+================================================================================
+Note: This report was generated using AI — Claude Code (Anthropic),
+      model claude-opus-4-7.
+================================================================================

@@ -8,5 +8,6 @@ This directory contains complete measurement data for all benchmarked and implem
 - [benchmark_graphs/](benchmark_graphs/) — generated graphs visualizing speed and memory comparisons across implementations and security levels
 - [time_analysis/mlkem_functions/](time_analysis/mlkem_functions/) — results of the timing analysis of independent ML-KEM algorithm functions (call counts and cumulative cycle counts per function)
 - [time_analysis/kpke_functions/](time_analysis/kpke_functions/) — results of the timing analysis of functions called by the K-PKE algorithm for all three ML-KEM security levels (512/768/1024)
+- [comparison_Og_Os/](comparison_Og_Os/) — side-by-side comparison of the `-Og` and `-Os` compiler optimization flags across all implemented variants and ML-KEM security levels; contains the two raw benchmark logs (`benchmark_Og.txt`, `benchmark_Os.txt`) and a generated comparison report (`comparison_Og_os.txt`) reporting average cycles and peak stack usage with percentage deltas
 
 > **Note:** The `time_analysis` results were measured on the reference implementation **before** any optimizations were applied to mlkem-esp32. Running the time analysis tests on the current version of mlkem-esp32 will not produce the same results.
