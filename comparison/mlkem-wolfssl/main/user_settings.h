@@ -41,7 +41,6 @@
 #ifdef OPT_STACK   /* minimizes combined stack + heap */
     #define WOLFSSL_SHA3_SMALL
     #define WOLFSSL_MLKEM_ENCAPSULATE_SMALL_MEM
-    #define SHA3_BY_SPEC                    // extremely slow
     #define WOLFSSL_MLKEM_NO_LARGE_CODE
 #endif
 
@@ -49,10 +48,6 @@
     #define WOLFSSL_SHA3_SMALL
     #define WOLFSSL_MLKEM_NO_LARGE_CODE
     #define WOLFSSL_MLKEM_SMALL
-    // WOLFSSL_SMALL_STACK excluded: adds +780B heap and +900B flash when
-    // combined with the other flags above, negating the image-size benefit
-    #define WOLFSSL_MLKEM_NTT_UNROLL
-    #define WOLFSSL_MLKEM_INVNTT_UNROLL
 #endif
 
 #ifdef OPT_BALANCED  
