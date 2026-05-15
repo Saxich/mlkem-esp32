@@ -1,0 +1,548 @@
+ML-KEM Benchmark Automated Results
+Run at: 2026-05-15 12:49:50
+Port:   COM4
+Compiler flag: -O2
+==================================================
+
+[K=2 SPEED]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 512
+  Mode: SPEED
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     6592       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     9024       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     8976       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1070324 1104315 1074827    5459
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1090207 1151105 1095229    5737
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1211691 1243096 1213829    4049
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=3 SPEED]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 768
+  Mode: SPEED
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+    10688       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+    13632       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+    13584       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1664381 1704809 1669500    7813
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1755968 1815344 1761790    8253
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1916918 1974399 1920619    7853
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=4 SPEED]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 1024
+  Mode: SPEED
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+    15616       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+    19264       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+    19216       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  2578316 2639300 2585443    9911
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  2688115 2749360 2696179   11277
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  2897864 2957225 2902415    9450
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=2 SPEED_DUALCORE]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 512
+  Mode: SPEED DUALCORE
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     6432    2160
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     9120    2160
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     9072    2160
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+   781268  821351  786721    4464
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+   758575  793572  762660    4488
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+   865899  903090  870533    4313
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=3 SPEED_DUALCORE]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 768
+  Mode: SPEED DUALCORE
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+    10528    2160
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+    13712    2160
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+    13664    2160
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1186232 1221518 1191427    7443
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1218147 1252689 1222330    5179
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1335600 1368075 1338534    3708
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=4 SPEED_DUALCORE]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 1024
+  Mode: SPEED DUALCORE
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+    15648    2160
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+    19344    2160
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+    19296    2160
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1567553 1630340 1574807   11187
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1602230 1637864 1607184    6826
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1755222 1816920 1762736   11100
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=2 STACK_XTREME]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 512
+  Mode: STACK XTREME
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     2048       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     2096       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     2048       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1523458 1558933 1529306    5870
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1502162 1536246 1507059    6388
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1609720 1640231 1611924    4919
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=3 STACK_XTREME]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 768
+  Mode: STACK XTREME
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     2128       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     2272       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     2128       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  2414744 2447063 2418707    7650
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  2433220 2464834 2436639    6888
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  2569719 2600094 2573130    7305
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=4 STACK_XTREME]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 1024
+  Mode: STACK XTREME
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     2224       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     2272       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     2320       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  3661023 3721871 3667689   10320
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  3677212 3737404 3685118   11071
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  3856927 3889015 3862388    9746
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=2 STACK]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 512
+  Mode: STACK
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     2528       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     2560       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     2512       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1144983 1177808 1148413    5437
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1125319 1158873 1128976    5666
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1226274 1256963 1228996    6233
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=3 STACK]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 768
+  Mode: STACK
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     3056       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     3088       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     3040       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1809775 1842575 1815444    8815
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1826677 1859826 1831513    7929
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1969222 2027677 1973361    8060
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=4 STACK]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 1024
+  Mode: STACK
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     3760       0
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     3808       0
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     3760       0
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  2746613 2781380 2752206    9100
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  2740805 2775280 2747519   10189
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  2931362 2990273 2936636   11244
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=2 STACK_DUALCORE]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 512
+  Mode: STACK DUALCORE
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     2560    2160
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     2640    2160
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     2592    2160
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+   823379  857538  830860    5017
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+   837146  873899  843903    5868
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+   914005  942313  916684    3653
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=3 STACK_DUALCORE]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 768
+  Mode: STACK DUALCORE
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     3088    2160
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     3168    2160
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     3120    2160
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1421762 1480226 1427036    7203
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  1453236 1489581 1458873    7602
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  1572790 1604731 1576074    4853
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+[K=4 STACK_DUALCORE]
+  ========================================
+   CONFIG INFO
+  ========================================
+  CPU Frequency: 240000000 Hz (240.000 MHz)
+  Algorithm: ML-KEM 1024
+  Mode: STACK DUALCORE
+  ========================================
+   MEMORY BENCHMARK
+  ========================================
+  [Memory] Keypair:
+  [Raw - stackmax heapmax]:
+     3600    2160
+  [Memory] Encapsulation:
+  [Raw - stackmax heapmax]:
+     3872    2160
+  [Memory] Decapsulation:
+  [Raw - stackmax heapmax]:
+     3728    2160
+  ========================================
+   PERFORMANCE BENCHMARK
+  ========================================
+  [Performance] Keypair Generation:
+  [Raw - min max avg stddev]:
+  1839302 1874246 1848556    6665
+  [Performance] Encapsulation:
+  [Raw - min max avg stddev]:
+  2282281 2319630 2290675    8055
+  [Performance] Decapsulation:
+  [Raw - min max avg stddev]:
+  2431839 2493009 2445541    8498
+  ========================================
+   INTEGRITY CHECK
+  ========================================
+  [Integrity] PASSED: All 100 keys matched successfully
+
+==================================================
+DONE
