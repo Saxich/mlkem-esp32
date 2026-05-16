@@ -1,0 +1,2 @@
+*.py linguist-documentation
+*.inc linguist-language=C
