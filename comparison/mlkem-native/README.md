@@ -33,6 +33,11 @@ cd /path/to/your/destination/
 
 ### 2. Download mlkem-native
 
+> **Note (Windows):** If the script was checked out with Windows line endings (CRLF), bash will fail with `$'\r': command not found`. Fix it with:
+> ```bash
+> dos2unix setup_mlkem-native.sh
+> ```
+
 ```bash
 bash setup_mlkem-native.sh
 ```

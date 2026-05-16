@@ -2,6 +2,8 @@
 
 Benchmark of ML-KEM-512/768/1024 (CRYSTALS-Kyber / FIPS 203) on ESP32 using wolfSSL v5.8.4.
 
+> Benchmark results comparing wolfSSL's build profiles (`OPT_SIZE`, `OPT_STACK`, `OPT_SPEED`, `OPT_BALANCED`) are in [results/wolffssl_profiles/](../../results/wolffssl_profiles/).
+
 ---
 
 ## Disclaimer
@@ -32,6 +34,11 @@ cd /path/to/your/destination/
 > The folder may be renamed — what matters is that `main/`, `components/`, `CMakeLists.txt`, `setup_wolfssl.sh`, and `sdkconfig` are all present at the root level.
 
 ### 2. Download and patch wolfSSL
+
+> **Note (Windows):** If the script was checked out with Windows line endings (CRLF), bash will fail with `$'\r': command not found`. Fix it with:
+> ```bash
+> dos2unix setup_wolfssl.sh
+> ```
 
 ```bash
 bash setup_wolfssl.sh

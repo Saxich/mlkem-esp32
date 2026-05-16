@@ -5,13 +5,14 @@
 ## 1. Requirements
 
 - ESP32
-- ESP-IDF v6.0 — [Install ESP-IDF and Tools](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/installation.html)
+- ESP-IDF v6.0 — [Install ESP-IDF and Tools](https://docs.espressif.com/projects/vscode-esp-idf-extension/en/latest/installation.html) — must be installed and activated so that `idf.py` is available on PATH before running any commands in this manual
+- Git, Bash (WSL, Git Bash, or Linux/macOS terminal)
 
 ---
 
 ## 2. Why API Functions Must Be Called from a Pinned Task
 
-**API functions must not be called directly from `app_main`.** On ESP32 (dual-core), FreeRTOS can migrate a task created with `xTaskCreate` to any core at any time. The mlkem-esp32 dual-core implementation assumes the main task and the support task run on specific cores — if this is violated, the support task waits for synchronization that never arrives, causing the program to loop and hang.
+**API functions must not be called directly from `app_main`.** ML-KEM operations are computationally intensive and require a dedicated, core-pinned FreeRTOS task with a sufficiently large stack. Without pinning, FreeRTOS may migrate the task between cores at any time, which causes undefined behavior — including infinite loops and system lockup — regardless of whether a single-core or dual-core variant is used. The dual-core variants additionally require the calling task to remain on a fixed core for the inter-core synchronization to function correctly.
 
 Always use `xTaskCreatePinnedToCore`:
 
@@ -112,14 +113,14 @@ Define **exactly one**. If none is defined, `SPEED` is used.
 
 ### Tests — TEST_TO_TURN
 
-If you are using the repository without modifications, set `TEST_TO_TURN` to one of the following:
+Set `TEST_TO_TURN` in `main/user_settings.h` to select which test runs on boot.
 
-| Value | What it does |
-|---|---|
-| `1` | Memory benchmark + performance benchmark + integrity check |
-| `3` | KAT test; verifies output against known vectors |
-| `4` | KAT test + benchmark combined; memory usage and performance can be negatively affected |
-| `10` | Generates random vector set (pk, sk, ct, ss) to stdout |
+| Value | Test | Description |
+|---|---|---|
+| `1` | Benchmark suite | Runs memory benchmark, performance benchmark, and integrity check sequentially. Each operation (KeyGen, Encaps, Decaps) is measured over 100 iterations for memory and 200 iterations for performance, preceded by 10 warm-up iterations. Reports peak stack and heap usage and CPU cycle statistics (min, max, avg, stddev). Integrity check performs 100 full KeyGen → Encaps → Decaps round trips and verifies that both parties derive the same shared secret. |
+| `3` | KAT test | Runs the algorithm against known answer vectors generated on the ESP32. Computes SHA3-256 hashes of the output and compares them against reference hashes stored in flash. |
+| `4` | KAT test + benchmark suite | Runs the KAT test followed by the full benchmark suite. Running both together may affect memory and performance measurements due to residual heap fragmentation from the KAT test. |
+| `10` | Vector generator | Performs a single KeyGen → Encaps → Decaps round trip and prints the resulting (pk, sk, ct, ss) vectors as hex to stdout. |
 
 ---
 
