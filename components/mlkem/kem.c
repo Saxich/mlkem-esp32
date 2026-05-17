@@ -79,7 +79,10 @@ int crypto_kem_keypair(uint8_t *pk,
   int ret;
 
   VAR_ALIGN uint8_t coins[2*MLKEM_SYMBYTES];
-  esp_randombytes(coins, 2*MLKEM_SYMBYTES);
+  if (esp_randombytes(coins, 2*MLKEM_SYMBYTES) != 0) {
+    buffer_zeroize(coins, sizeof(coins));
+    return -1;
+  }
   ret = crypto_kem_keypair_derand(pk, sk, coins);
 
 
@@ -161,7 +164,10 @@ int crypto_kem_enc(uint8_t *ct,
   int ret = 0;
 
   VAR_ALIGN uint8_t coins[MLKEM_SYMBYTES];
-  esp_randombytes(coins, MLKEM_SYMBYTES);
+  if (esp_randombytes(coins, MLKEM_SYMBYTES) != 0) {
+    buffer_zeroize(coins, sizeof(coins));
+    return -1;
+  }
 
   /* Don't release system RNG output */
   // hash_h(buf, buf, MLKEM_SYMBYTES)s  // buf[32:64] = H(pk)

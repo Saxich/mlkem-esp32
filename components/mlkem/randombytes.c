@@ -21,18 +21,21 @@
  */
 
 #include "psa/crypto.h"
-#include <assert.h>
+#include "randombytes.h"
 
 static int psa_initialized = 0;
 
-static void esp_randombytes_init(void) {
-    if (psa_initialized) return;
+static psa_status_t esp_randombytes_init(void) {
+    if (psa_initialized) return PSA_SUCCESS;
     psa_status_t status = psa_crypto_init();
-    assert(status == PSA_SUCCESS);
+    if (status != PSA_SUCCESS) return status;
     psa_initialized = 1;
+    return PSA_SUCCESS;
 }
 
-void esp_randombytes(uint8_t *out, size_t len) {
-    esp_randombytes_init();
-    psa_generate_random(out, len);
+int esp_randombytes(uint8_t *out, size_t len) {
+    psa_status_t status = esp_randombytes_init();
+    if (status != PSA_SUCCESS) return -1;
+    status = psa_generate_random(out, len);
+    return (status == PSA_SUCCESS) ? 0 : -1;
 }

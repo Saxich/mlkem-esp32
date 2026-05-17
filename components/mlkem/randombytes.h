@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 
-void esp_randombytes(uint8_t *out, size_t len);
+int esp_randombytes(uint8_t *out, size_t len);
 
 
 
