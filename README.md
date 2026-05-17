@@ -57,6 +57,7 @@ Complete measurement data for all benchmarked and implemented variants is availa
 - [results/time_analysis/](results/time_analysis/) — per-function cycle counts and call counts for ML-KEM and K-PKE functions, measured on the reference implementation before any optimizations
 - [results/comparison_Og_Os_O2/](results/comparison_Og_Os_O2/) — side-by-side comparison of `-Og`, `-Os`, and `-O2` compiler flags across all variants; includes raw benchmark logs and generated reports with average cycle counts and peak stack usage with percentage deltas
 - [results/wolffssl_profiles/](results/wolffssl_profiles/) — comparison of wolfSSL's four built-in optimization profiles (`OPT_SIZE`, `OPT_STACK`, `OPT_SPEED`, `OPT_BALANCED`) for ML-KEM-768; CPU cycle counts, peak stack and heap usage per operation, and flash binary size; profiles are defined in [comparison/](comparison/)
+- [results/kyber_sha3_s90/](results/kyber_sha3_s90/) — direct head-to-head measurement of Kyber (SHA-3) against Kyber-90s (SHA-2 + AES) on `kybesp32`, covering all combinations of single-/dual-core, hardware SHA accelerator on/off, and hardware AES accelerator on/off, under identical hardware, ESP-IDF version, and optimization flags; isolates the actual impact of the 90s variant under controlled conditions
 
 > **Timing analysis** (per-function cycle counts used to determine the dual-core task split) is on the [`time-analysis`](../../tree/time-analysis) branch.
 
