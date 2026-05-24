@@ -47,7 +47,7 @@
 
 
 /* Zetas for NTT. */
-const int16_t zetas[MLKEM_N / 2] = {
+const int16_t zetas[MLKEM_N / 2] FAST_DATA =  {
     2285, 2571, 2970, 1812, 1493, 1422,  287,  202,
     3158,  622, 1577,  182,  962, 2127, 1855, 1468,
      573, 2004,  264,  383, 2500, 1458, 1727, 3199,
@@ -88,7 +88,7 @@ const int16_t zetas[MLKEM_N / 2] = {
  *
  * @param  [in, out]  r  Polynomial to transform.
  */
-void ntt(int16_t r[256]) {
+void FAST_RAM ntt(int16_t r[256]) {
     unsigned int len, k = 1, j, start;
 
     /* Layer 1: len = 128 */
@@ -155,7 +155,7 @@ void ntt(int16_t r[256]) {
 **************************************************/
 
 /* Zetas for inverse NTT. */
-const int16_t zetas_inv[MLKEM_N / 2] = {
+const int16_t zetas_inv[MLKEM_N / 2] FAST_DATA = {
     1701, 1807, 1460, 2371, 2338, 2333,  308,  108,
     2851,  870,  854, 1510, 2535, 1278, 1530, 1185,
     1659, 1187, 3109,  874, 1335, 2111,  136, 1215,
@@ -197,7 +197,7 @@ const int16_t zetas_inv[MLKEM_N / 2] = {
  *
  * @param  [in, out]  r  Polynomial to transform.
  */
-void invntt(int16_t r[256]) {
+void FAST_RAM invntt(int16_t r[256]) {
     unsigned int len;
     unsigned int k;
     unsigned int j;
@@ -255,69 +255,4 @@ void invntt(int16_t r[256]) {
         r[j]               = MLKEM_MONT_RED(XT_MUL16S(zeta2, t));
         r[j + MLKEM_N / 2] = MLKEM_MONT_RED(XT_MUL16S(zeta2, MLKEM_MONT_RED(XT_MUL16S(zeta, d))));
     }
-}
-
-/* Multiplication of polynomials in Zq[X]/(X^2-zeta).
- *
- * Used for multiplication of elements in Rq in NTT domain.
- *
- * FIPS 203, Algorithm 12: BaseCaseMultiply(a0, a1, b0, b1, zeta)
- * Computes the product of two degree-one polynomials with respect to a
- * quadratic modulus.
- *   1: c0 <- a0.b0 + a1.b1.zeta
- *   2: c1 <- a0.b1 + a1.b0
- *   3: return (c0, c1)
- *
- * @param  [out]  r     Result polynomial.
- * @param  [in]   a     First factor.
- * @param  [in]   b     Second factor.
- * @param  [in]   zeta  Integer defining the reduction polynomial.
- */
-void basemul(int16_t* r, const int16_t* a, const int16_t* b, int16_t zeta)
-{
-    int16_t a0 = a[0];
-    int16_t a1 = a[1];
-    int16_t b0 = b[0];
-    int16_t b1 = b[1];
-
-    /* Step 1: c0 = a0*b0 + a1*b1*zeta */
-    int32_t p1 = XT_MUL16S(a0, b0);
-    int16_t r0 = MLKEM_MONT_RED(XT_MUL16S(a1, b1));
-    int32_t p2 = XT_MUL16S(zeta, r0);
-    r[0] = MLKEM_MONT_RED(p2 + p1);
-
-    /* Step 2: c1 = a0*b1 + a1*b0 */
-    r[1] = MLKEM_MONT_RED(XT_MUL16S(a0, b1) + XT_MUL16S(a1, b0));
-}
-
-
-
-/*************************************************
-* Name:        basemul_acc
-*
-* Description: Multiplication of polynomials in Zq[X]/(X^2-zeta)
-*              used for multiplication of elements in Rq in NTT domain.
-*              Accumulating version
-*              Recreated from mlkem-c-embedded basemul_acc to fit wolfSSL style.
-*
-* Arguments:   - int16_t* r: pointer to the output polynomial
-*              - const int16_t* a: pointer to the first factor
-*              - const int16_t* b: pointer to the second factor
-*              - int16_t zeta: integer defining the reduction polynomial
-**************************************************/
-void basemul_acc(int16_t* r, const int16_t* a, const int16_t* b, int16_t zeta)
-{
-    int16_t a0 = a[0];
-    int16_t a1 = a[1];
-    int16_t b0 = b[0];
-    int16_t b1 = b[1];
-
-    /* Step 1: c0 = a0*b0 + a1*b1*zeta */
-    int32_t p1 = XT_MUL16S(a0, b0);
-    int16_t t  = MLKEM_MONT_RED(XT_MUL16S(a1, b1));
-    int32_t p2 = XT_MUL16S(zeta, t);
-    r[0] += MLKEM_MONT_RED(p2 + p1);
-
-    /* Step 2: c1 = a0*b1 + a1*b0 */
-    r[1] += MLKEM_MONT_RED(XT_MUL16S(a0, b1) + XT_MUL16S(a1, b0));
 }

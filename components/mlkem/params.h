@@ -137,4 +137,16 @@
 #define XSTRUCT_ALIGN_VAL 32
 #define VAR_ALIGN __attribute__((aligned(4)))
 
+
+/* On Xtensa, place hot code/data in internal RAM to avoid
+ * flash cache latency. No-ops on all other architectures. */
+#ifdef __XTENSA__
+  #include "esp_attr.h"
+  #define FAST_RAM  IRAM_ATTR
+  #define FAST_DATA DRAM_ATTR
+#else
+  #define FAST_RAM
+  #define FAST_DATA
+#endif
+
 #endif

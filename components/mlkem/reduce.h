@@ -39,40 +39,11 @@
 #define QINV -3327 // q^-1 mod 2^16
 
 
-
-/* originalne makro, truncation failuje kat test*/                               
-/*
-#define MLKEM_BARRETT_RED(a) \
-    (int16_t)((int16_t)(a) - (int16_t)((int16_t)( \
-        ((int32_t)((int32_t)MLKEM_V * (int16_t)(a))) >> 26) * (word16)MLKEM_Q))
-*/
-/*
-#define MLKEM_MONT_RED(a) \
-    (int16_t)(((a) - (int32_t)(((int16_t)((int16_t)(a) * \
-                                (int16_t)MLKEM_QINV)) * \
-                               (int32_t)MLKEM_Q)) >> 16)
-
-#define MLKEM_BARRETT_RED(a) ({ \
-    int16_t _a = (a); \
-    int16_t _t = ((int32_t)MLKEM_V * _a + (1<<25)) >> 26; \
-    _a - _t * MLKEM_Q; \
-})
-*/
-
-/* Xtensa MUL16S bez závislosti na xt_mul.h */
-// static inline __attribute__((always_inline)) int32_t XT_MUL16S(int16_t a, int16_t b) {
-//     int32_t res;
-//     __asm__ ("mul16s %0, %1, %2" : "=r"(res) : "r"(a), "r"(b));
-//     return res;
-// }
-
-#define XT_SRAI(a, shift) ((int32_t)(a) >> (shift))
-
 #define MLKEM_BARRETT_RED(a) ({ \
     int32_t _a = (int32_t)(a); \
     int32_t _t = XT_MUL16S((int16_t)(_a >> 5), (int16_t)MLKEM_V); \
     _t += (1 << 25) >> 5; \
-    _t  = XT_SRAI(_t, 21); \
+    _t  = _t >> 21; \
     (int16_t)(_a - XT_MUL16S((int16_t)_t, (int16_t)MLKEM_Q)); \
 })
 
@@ -81,7 +52,7 @@
     int16_t _u = (int16_t)_a; \
     int32_t _t = XT_MUL16S(_u, (int16_t)MLKEM_QINV); \
     _t = XT_MUL16S((int16_t)_t, (int16_t)MLKEM_Q); \
-    (int16_t)XT_SRAI(_a - _t, 16); \
+    (int16_t)((_a - _t) >> 16); \
 })
 
 
