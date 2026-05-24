@@ -2,6 +2,9 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
+> **Branch note — `attr-inline-basemuls-experiment`**
+> This branch holds an experimental modification of [components/mlkem/ntt.c](components/mlkem/ntt.c) in which the `ntt`/`invntt` routines and the `zetas`/`zetas_inv` tables are annotated with the ESP-IDF `IRAM_ATTR` and `DRAM_ATTR` attributes (wrapped as `FAST_RAM` / `FAST_DATA` macros in [components/mlkem/params.h](components/mlkem/params.h)), placing the hot NTT code and constants directly into internal SRAM to avoid flash cache misses. The corresponding benchmark output and side-by-side comparison against the unmodified `-Os` build is in [results/ATTR/](results/ATTR/). The measured benefit turned out to be inconsistent across optimization variants, security levels and operations, so this change is kept as an experiment on this branch only and is not merged into `main`.
+
 Optimized implementation of **ML-KEM (FIPS 203)** for the ESP32 microcontroller, developed as part of a bachelor thesis. The project provides multiple build variants targeting different trade-offs between execution speed and stack memory usage, including dual-core parallelization exploiting the ESP32's Xtensa LX6 dual-core architecture.
 
 > For setup, configuration, build instructions, and usage see [SYSTEM_MANUAL.md](SYSTEM_MANUAL.md).
